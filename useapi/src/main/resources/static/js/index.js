@@ -48,3 +48,23 @@ function findIdPwd(){
         }
     })
 }
+
+// 네이버트랜드검색어 컨트롤러 보내기
+let btnTrend = document.getElementById("btnTrend");
+
+function searchTrend(){
+    let trendFrm = document.trendForm;
+    let frmData = new FormData(trendFrm);
+
+    $.ajax({
+        url:"/trendFormApi",
+        type:"POST",
+        data:frmData,
+        processData: false,  // 필수: FormData를 문자열로 변환하지 않음
+        contentType: false,  // 필수: 컨텐츠 타입을 false로 설정하여 jQuery가 설정할 수 있도록 함
+        success:(resp)=>{
+            alert(resp);
+        }
+    })
+}
+

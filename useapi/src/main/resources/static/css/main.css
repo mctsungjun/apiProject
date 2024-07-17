@@ -1,5 +1,6 @@
 .content-change{
     height: 900px;
+    overflow:auto;
 }
 .header-container {
     height: 80vh; /* 헤더의 전체 높이 설정 */
