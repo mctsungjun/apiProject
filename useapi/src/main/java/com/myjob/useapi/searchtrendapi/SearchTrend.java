@@ -31,7 +31,7 @@ public class SearchTrend {
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-        requestHeaders.put("Content-Type", "application/json; charset=utf-8");
+        requestHeaders.put("Content-Type", "application/json; charset=utf-8"); // charset=utf-8 한글이 깨짐으로 
         return requestHeaders;
 
     }
@@ -81,6 +81,7 @@ public class SearchTrend {
 
             conn.setDoOutput(true);
             try(DataOutputStream wr = new DataOutputStream(conn.getOutputStream())){
+                // 한글깨짐에 StandardCharsets.UTF_8 설정
                 wr.write(requestBody.getBytes(StandardCharsets.UTF_8));
                 wr.flush();
             }

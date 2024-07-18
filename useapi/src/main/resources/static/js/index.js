@@ -55,7 +55,8 @@ let btnTrend = document.getElementById("btnTrend");
 function searchTrend(){
     let trendFrm = document.trendForm;
     let frmData = new FormData(trendFrm);
-
+    
+    
     $.ajax({
         url:"/trendFormApi",
         type:"POST",
@@ -63,8 +64,14 @@ function searchTrend(){
         processData: false,  // 필수: FormData를 문자열로 변환하지 않음
         contentType: false,  // 필수: 컨텐츠 타입을 false로 설정하여 jQuery가 설정할 수 있도록 함
         success:(resp)=>{
-            alert(resp);
+            
+            let temp = $(resp).find(".dashboard");
+            $(".content-change").html(temp);
         }
     })
 }
+
+// n개씩 보기
+let pageSize = document.getElementById("pageSize");
+ 
 

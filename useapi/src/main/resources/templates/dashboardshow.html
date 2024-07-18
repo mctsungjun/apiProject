@@ -135,9 +135,9 @@
                                     <div class="row">
                                     <div class="col-md-9 datatable-dropdown">
                                             <label>
-                                                <select class="datatable-selector" id="entriesPerPage">
+                                                <select class="datatable-selector" id="pageSize" name="pageSize">
                                                     <option value="5">5</option>
-                                                    <option value="10" selected>10</option>
+                                                    <option value="10">10</option>
                                                     <option value="15">15</option>
                                                     <option value="20">20</option>
                                                     <option value="25">25</option>
@@ -155,16 +155,16 @@
                                     <thead>
                                         <tr>
                                         <th scope="col">Period</th>
-                                        <th scope="col" >주제어1</th>
-                                        <th scope="col" >주제어2</th>
+                                        <th scope="col" th:text="${keywords}"></th>
+                                        <th scope="col" th:text="${keywords2}"></th>
                                       
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr >
-                                        <td >기간</td>
-                                        <td >관심1</td>
-                                        <td >관심2</td>
+                                        <tr th:each="i : ${#numbers.sequence(0,period.size()-1)}">
+                                        <td th:text="${period[i]}"></td>
+                                        <td th:text="${ratios[i]}">random</td>
+                                        <td th:text="${ratios2[i]}">data</td>
                                         </tr>
                                       
                                 
