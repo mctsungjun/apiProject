@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,8 +16,12 @@ import com.myjob.useapi.dto.SearchTrendDto;
 import com.myjob.useapi.json.Data;
 import com.myjob.useapi.json.Response;
 import com.myjob.useapi.json.Result;
+import com.myjob.useapi.page.PageSevice;
 import com.myjob.useapi.page.TrendPager;
 import com.myjob.useapi.searchtrendapi.SearchTrend;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.google.gson.Gson;
 
 
@@ -25,8 +29,9 @@ import com.google.gson.Gson;
 public class TrendController {
     
     @RequestMapping(path="/trendFormApi")
-    public ModelAndView trendApi(@ModelAttribute SearchTrendDto trend ){
+    public ModelAndView trendApi(@ModelAttribute SearchTrendDto trend ,@RequestParam(name="pageSize",defaultValue = "3") int pagesize, @RequestParam(name="pageNum",defaultValue = "1") int pagenum, HttpSession session ){
         ModelAndView mv = new ModelAndView();
+        
         String keywords = "";
         String keywords2 = "";
         List<String> periods = new ArrayList<>();
@@ -68,15 +73,41 @@ public class TrendController {
                     }
                 }
             }
-          
-         
+            
+            // page처리를 위해서 행갯수
+            PageSevice pageSevice = new PageSevice();
+            // 전체 행 수
+            int totalBoard = periods.size();
+            int blockSize = 10;
+            int pageNum = pagenum;
+            int pageSize = pagesize;
+            TrendPager pager = pageSevice.setPager(pageSize, totalBoard, blockSize, pageNum);
+            int totalPage = pager.getTotalPage();
+            int pagenumer =pager.getPageNum();
+             // 세션 고정
+            session.setAttribute("startDate",trend.getStartDate());
+            session.setAttribute("endDate",trend.getEndDate());
+            session.setAttribute("groupName",trend.getGroupName());
+            session.setAttribute("keywords",trend.getKeywords()[0] );
+            session.setAttribute("groupName2", trend.getGroupName2());
+            session.setAttribute("keywords2",trend.getKeywords2()[0] );
+            session.setAttribute("pageSize", pager.getPageSize());
+           
+            // 리스트 구간 조회
+            List<String> subPeriods =periods.subList(pager.getStartRow(), pager.getEndRow());  
+            List<Double> subRatios = ratios.subList(pager.getStartRow(), pager.getEndRow());  
+            List<String> subPeriods2 =periods2.subList(pager.getStartRow(), pager.getEndRow()); 
+            List<Double> subRatios2 = ratios2.subList(pager.getStartRow(), pager.getEndRow()); 
+            
+            
             mv.addObject("keywords", keywords);
             mv.addObject("keywords2", keywords2);
-            mv.addObject("period", periods);
-            
-            mv.addObject("ratios", ratios);
-            mv.addObject("ratios2", ratios2);
-
+            mv.addObject("period", subPeriods);
+            mv.addObject("period2", periods2);
+            mv.addObject("ratios", subRatios);
+            mv.addObject("ratios2", subRatios2);
+            mv.addObject("trendPager", pager);
+           
             mv.setViewName("dashboardshow");
             return mv;
         }
