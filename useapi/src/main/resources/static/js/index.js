@@ -90,8 +90,11 @@ function changePage(page) {
         processData: false,
         contentType: false,
         success: function(resp) {
+           
             let temp = $(resp).find(".dashboard");
             $(".content-change").html(temp);
+            //차트 집어넣기
+            chartLine(frmData);
         },
         error: function(xhr, status, error) {
             console.error("AJAX request error:", status, error);
@@ -99,3 +102,42 @@ function changePage(page) {
     });
 }
 
+function chartLine(frmData){
+    var chartone = document.getElementById("myChart1").getContext('2d');
+   
+    $.ajax({
+        url: "/chartadd",
+        type: "POST",
+        data: frmData,
+        processData: false,
+        contentType: false,
+        success: function(resp) {
+            // alert(resp);
+
+            // resp.periods와 resp.ratios를 각각 labels와 data로 사용
+            let chart = new Chart(chartone, {
+                type: 'line',
+                data: {
+                    labels: resp.periods, // labels에는 resp.periods 배열을 넣음
+                    datasets: [{
+                        data: resp.ratios, // 첫 번째 dataset의 data에 resp.ratios 배열을 넣음
+                        label: resp.keywords,
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }, {
+                        data: resp.ratios2, // 두 번째 dataset의 data에 resp.ratios2 배열을 넣음
+                        label: resp.keywords2,
+                        borderColor: "#8e5ea2",
+                        fill: false 
+                    }]
+                },
+                options: { // options는 옵션 (option이 아니라 options임에 유의)
+                    title: {
+                        display: false,
+                        text: '검색어비율'
+                    }
+                }
+            });
+        }
+    });
+}
