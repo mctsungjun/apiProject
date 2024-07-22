@@ -110,7 +110,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Line Chart
                                     </div>
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -119,7 +119,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        Bar Chart 
                                     </div>
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -133,17 +133,17 @@
                             <div class="card-body">
                                 <div class="container datatable-top"> 
                                     <div class="row">
-                                    <div class="col-md-9 datatable-dropdown">
-                                            <label>
-                                                <select class="datatable-selector" id="pageSize" name="pageSize">
-                                                    <option value="5">5</option>
-                                                    <option value="10" selected>10</option>
-                                                    <option value="15">15</option>
-                                                    <option value="20">20</option>
-                                                    <option value="25">25</option>
-                                                </select>개
-                                            </label>
-                                    </div>
+                                        <div class="col-auto select-container">
+                                            <select class="form-select" id="pageSize" name="pageSize">
+                                                <option value="5">5</option>
+                                                <option value="10" selected>10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="25">25</option>
+                                            </select>
+                                            <div class="text-container">개</div>
+                                        </div>
+                                    
                                     <!-- <div class="col-md-3 d-flex align-items-end datatable-search">
                                             <input class="datatable-input" placeholder="Search..." type="search" title="Search within table" aria-controls="datatablesSimple">
                                     </div> -->
@@ -215,7 +215,7 @@
              });
          });
          </script> -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
         <script src="js/scripts.js"></script>
       
         <!-- <script src="assets/demo/chart-area-demo.js"></script>

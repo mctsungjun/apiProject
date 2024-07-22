@@ -104,7 +104,7 @@ function changePage(page) {
 
 function chartLine(frmData){
     var chartone = document.getElementById("myChart1").getContext('2d');
-   
+    var charttwo = document.getElementById("myChart2").getContext('2d');
     $.ajax({
         url: "/chartadd",
         type: "POST",
@@ -113,7 +113,7 @@ function chartLine(frmData){
         contentType: false,
         success: function(resp) {
             // alert(resp);
-
+            //Line chart
             // resp.periods와 resp.ratios를 각각 labels와 data로 사용
             let chart = new Chart(chartone, {
                 type: 'line',
@@ -128,6 +128,38 @@ function chartLine(frmData){
                         data: resp.ratios2, // 두 번째 dataset의 data에 resp.ratios2 배열을 넣음
                         label: resp.keywords2,
                         borderColor: "#8e5ea2",
+                        fill: false 
+                    }]
+                },
+                options: { // options는 옵션 (option이 아니라 options임에 유의)
+                    title: {
+                        display: false,
+                        text: '검색어비율'
+                    }
+                }
+            });
+
+            //bar chart
+
+            let chart2 = new Chart(charttwo, {
+                type: 'bar',
+                data: {
+                    labels: resp.periods, // labels에는 resp.periods 배열을 넣음
+                    datasets: [{
+                        data: resp.ratios, // 첫 번째 dataset의 data에 resp.ratios 배열을 넣음
+                        label: resp.keywords,
+                        backgroundColor: '#3e95cd', // dataset 배경색
+                        borderColor: 'white', // dataset 테두리 색상
+                        borderWidth: 2, // dataset 테두리 두께
+                        maxBarThickness: 30,// 최대 bar의 두께 설정
+                        fill: false
+                    }, {
+                        data: resp.ratios2, // 두 번째 dataset의 data에 resp.ratios2 배열을 넣음
+                        label: resp.keywords2,
+                        backgroundColor: '#8e5ea2', // dataset 배경색
+                        borderColor: 'white', // dataset 테두리 색상
+                        borderWidth: 2, // dataset 테두리 두께
+                        maxBarThickness: 30 ,// 최대 bar의 두께 설정
                         fill: false 
                     }]
                 },

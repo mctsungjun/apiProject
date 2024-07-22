@@ -112,6 +112,7 @@ public class SearchTrend {
     }
 
     public String readBody(InputStream body){
+        // 읽어올때 StandardCharsets.UTF_8 를 써주어야 한글이 안깨짐 
         InputStreamReader streamReader = new InputStreamReader(body, StandardCharsets.UTF_8);
         try (BufferedReader linReader = new BufferedReader(streamReader)){
             StringBuilder responseBody = new StringBuilder();

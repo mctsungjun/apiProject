@@ -91,8 +91,8 @@ public class TrendController {
             session.setAttribute("keywords",trend.getKeywords()[0] );
             session.setAttribute("groupName2", trend.getGroupName2());
             session.setAttribute("keywords2",trend.getKeywords2()[0] );
+            session.setAttribute("timeUnit", trend.getTimeUnit());
             session.setAttribute("pageSize", pager.getPageSize());
-           
            
             // 리스트 구간 조회
             List<String> subPeriods =periods.subList(pager.getStartRow(), pager.getEndRow());  

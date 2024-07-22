@@ -11,3 +11,18 @@
     color: white; /* 글자색 설정 */
     text-align: center; /* 텍스트 가운데 정렬 */
 }
+ /* Custom CSS for matching heights */
+ .select-container {
+    display: flex;
+    align-items: center;
+}
+
+.select-container select {
+    height: 38px; /* Adjust this height as needed */
+    margin-right: 5px; /* Optional: Add spacing between select and text */
+}
+
+.select-container .text-container {
+    height: 38px; /* Match the height of select */
+    line-height: 38px; /* Vertically center text */
+}
