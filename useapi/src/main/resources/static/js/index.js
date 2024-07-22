@@ -49,6 +49,53 @@ function findIdPwd(){
     })
 }
 
+//shoping 폼 불러오기
+function shoping(){
+    $.ajax({
+        url:"/shopingf",
+        type:"GET",
+        success:(resp)=>{
+            let temp = $(resp).find(".shoping");
+            $(".content-change").html(temp);
+        }
+    })
+}
+
+//contact 폼 불러오기
+function contact(){
+    $.ajax({
+        url:"/contactf",
+        type:"GET",
+        success:(resp)=>{
+            let temp = $(resp).find(".contact");
+            $(".content-change").html(temp);
+        }
+    })
+}
+// board-list불러오기
+function boardList(){
+    $.ajax({
+        url:"/board-list",
+        type:"GET",
+        success:(resp)=>{
+            let temp = $(resp).find(".boardlist");
+            $(".content-change").html(temp);
+        }
+
+    })
+}
+//board-list.html 의 쓰기 버튼 클릭시 이동
+function boardRegisterf(){
+    $.ajax({
+        url:"/boardregister",
+        type:"GET",
+        success:(resp)=>{
+            let temp = $(resp).find(".register");
+            $(".content-change").html(temp);
+        }
+    })
+}
+
 // 네이버트랜드검색어 컨트롤러 보내기
 // let btnTrend = document.getElementById("btnTrend");
 

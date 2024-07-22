@@ -41,4 +41,25 @@ public class BoardController {
     public String findIdPwF(){
         return "findIdPw";
     }
+    // shoping폼("/shopingf")
+    @GetMapping("/shopingf")
+    public String shopingf(){
+        return "shop";
+    }
+    // contack폼
+    @GetMapping("/contactf")
+    public String contactf(){
+        return "contact";
+    }
+    //board-list폼
+    @GetMapping("/board-list")
+    public String boardList(){
+        return "board/board-list";
+    }
+    //board-register폼
+    @GetMapping("/boardregister")
+    public String boardRegisterf(){
+        return "board/board-register";
+    }
+
 }
