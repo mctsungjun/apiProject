@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-6">
                 <label for="pwdchk" class="form-label"><span class="text-danger">*</span> 비밀번호확인</label>
-                <input type="password" class="form-control" id="pwdchk"  onblur="multi_chkpw();">
+                <input type="password" class="form-control" id="pwdchk"  name= "pwdchk" onblur="multi_chkpw();">
                 <span style="color:red; display:none;" id="no_multipw">※ 비밀번호가 일치하지 않습니다.</span>
                 <span style="color:blue; display:none;" id="ok_multipw">※ 비밀번호가 일치 합니다.</span>
             </div>
@@ -167,16 +167,10 @@
     
 
         <div class="col-md-12">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="Check"
-            >
-            <label class="form-check-label" for="gridCheck">
-              Check me out
-            </label>
-          </div>
+         
         </div>
         <div class="col-md-12 mb-5">
-          <button type="btn" class="btn btn-primary" onclick="joinform_chk();">가입하기</button>
+          <button type="button" class="btn btn-primary"  onclick="joinformBtn();">가입하기</button>
         </div>
       </form>
          </div>   

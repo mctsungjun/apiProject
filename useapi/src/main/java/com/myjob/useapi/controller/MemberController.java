@@ -218,7 +218,7 @@ public class MemberController {
      }
      //회원등록
            
-     @RequestMapping(path="/sung/registerR")
+     @RequestMapping(path="/sung/registerR" )
      public String registerR(@ModelAttribute MemberVo vo){
          ModelAndView mv = new ModelAndView();
          System.out.println("컨트롤러입니다 :"+vo);
@@ -232,16 +232,17 @@ public class MemberController {
      }
      //아이디중복확인
      @RequestMapping(path="/memberId/chk")
-     public int userIdchk(@RequestParam("userId") String id ){
-         System.out.println("usedId:  "+id);
-         if(!id.isEmpty()){
-             return 0;
-         }else{
-             return 1;
- 
-         }
- 
-     }
+    public int userIdchk(@RequestParam("userId") String id ){
+        String matchId = dao.userIdchk(id);
+        System.out.println("usedId:  "+matchId);
+        if(matchId.equals("ok")){
+            return 0;
+        }else{
+            return 1;
+
+        }
+
+    }
  
      //아이디/비번 찿기form
      @RequestMapping(path="/sung/findIdPwd")
