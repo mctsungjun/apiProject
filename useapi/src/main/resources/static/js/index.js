@@ -2,7 +2,7 @@
 let btnLoginForm = document.querySelector(".btnLoginForm");
 btnLoginForm.onclick = ()=>{
     $.ajax({
-        url:"/loginf",
+        url:"/sung/loginF",
         type:"GET",
         success:(resp)=>{
             let temp = $(resp).find(".change");
@@ -26,7 +26,7 @@ function btnSignupForm(){
 }
 
 // dashboard폼 불러오기
-let openDashboard = ()=>{
+function openDashboard(){
     $.ajax({
         url:"/dashboardf",
         type:"GET",
@@ -219,4 +219,40 @@ function chartLine(frmData){
             });
         }
     });
+}
+// 로그아웃
+function btnLogout(){
+    $.ajax({
+        url:"/sung/logout",
+        type:"GET",
+        success:(resp)=>{
+            location.href="/index";
+        }
+    })
+}
+// 상세페이지 보기
+function detailInfo(){
+    $.ajax({
+        url:"/sung/detail",
+        type:"POST",
+        success:(resp)=>{
+            let temp =$(resp).find(".change");
+            $(".content-change").html(temp);
+        }
+    })
+}
+// 수정버튼 클릭됨-------------------------------------------
+
+function modifyFrom(){
+	
+	$.ajax({
+		url:"/sung/modify",
+		type:"GET",
+		
+		success:(resp)=>{
+			let temp =$(resp).find(".change");
+			$(".content-change").html(temp);
+		}
+
+	})
 }

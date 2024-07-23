@@ -69,7 +69,7 @@
                             let frmData = $loginfrm.serialize();
                             $.ajax({
                                 url: "/sung/login",
-                                type:"GET",
+                                type:"POST",
                                 data:frmData,
                                 success: function(resp){
                                     // 받은 정보중에 id, name을
@@ -77,27 +77,28 @@
                                     if(resp.message==="false"){
                                         alert("아이디, 비번을 확인하세요");
                                     }else{
+                                        location.href="/index";
                                         //로그인 성공하면 클라이언트 세션에 아이디/이름 저장
                                       
-                                        $(document).ready(function() {
-                                            $.ajax ({
-                                            url : "/design_guide",
-                                            type: "GET",
-                                            // data: {"findStr" : findStr},               // * 이거 selected icon 넘겨줘야함
-                                            success: (resp) => {
-                                                let temp = $(resp).find(".designGuide");  // * nav    : nav.html
-                                                $(".content").html(temp);                 // * navbar : index.html
-                                            }
-                                        })
+                                        // $(document).ready(function() {
+                                        //     $.ajax ({
+                                        //     url : "/",
+                                        //     type: "GET",
+                                        //     // data: {"findStr" : findStr},               // * 이거 selected icon 넘겨줘야함
+                                        //     success: (resp) => {
+                                        //         // let temp = $(resp).find(".designGuide");  // * nav    : nav.html
+                                        //         // $(".content").html(temp);                 // * navbar : index.html
+                                        //     }
+                                        // })
                                                 
-                                    });
-                                        }
+                                //     });
+                                         }
 
                                     
-                                    }
+                                   }
                                 })
                             }else{
-                                alert('아이디와 비번을 확인해주세요')
+                                alert('아이디와 비번을 확인해주세요');
                             }
                         })
                         
@@ -107,24 +108,26 @@
                     
                 </script>
 
-
-                <div class="row mt-5">
-                    <div class="col-md-5">
-                       <!--네이버로그인 naverKakaoLogin.js파일로 이동-->
-                     
+              
+            <!--네이버로그인 naverKakaoLogin.js파일로 이동-->
+                   <div class="row mt-5 ">
                     
-                        <span class="list-group-item"><a href="javascript:openNaver();"  ><img src="imgs/btnD_축약형.png"  class="btn-img img-fluid bIcon"> </a></span>
+                         <div class="row-5">
+                     
+                        
+                        <span class="list-group-item"><a href="javascript:openNaver();"  ><img src="imgs/btnD_축약형.png"  style="width: 350px; height: 50px;"> </a></span>
 
                     </div>
-                    <script>
-                    
-
-                      </script>
-                    <div class="col-md-5 mx-md-4">
+                   
+                    <div class="row-5 mt-3">
                      
-                            <span class="list-group-item"><a href="javascript:openkakao();"  ><img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="200"
+                            <span class="list-group-item"><a href="javascript:openkakao();"  ><img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" style="width: 350px; height: 50px;"
                               alt="카카오 로그인 버튼" /> </a></span>    
-                    </div>
+                    </div>  
+                    
+                   
+               
+               
                     <ul class="list-group list-group-horizontal">
                         
                       </ul>

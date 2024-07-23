@@ -15,41 +15,41 @@ public class BoardController {
     //로그인 페이지
     @GetMapping("/loginf")
     public String loginF(){
-        return "login";
+        return "login/login";
     }
 
     //회원등록 페이지
     @GetMapping("/registerf")
     public String registerf(){
-        return "register";
+        return "login/register";
     }
 
     //비밀번호 찾기페이지
     @GetMapping("/passwordf")
     public String findPasswordForm(){
-        return "password";
+        return "login/password";
     }
 
     //dashBoard 페이지
     @GetMapping("/dashboardf")
     public String dashboardF(){
-        return "dashboard";
+        return "menu/dashboard";
     }
 
     // 아이디/비번찿기 폼
     @GetMapping("/findIdPwf")
     public String findIdPwF(){
-        return "findIdPw";
+        return "login/findIdPw";
     }
     // shoping폼("/shopingf")
     @GetMapping("/shopingf")
     public String shopingf(){
-        return "shop";
+        return "menu/shop";
     }
     // contack폼
     @GetMapping("/contactf")
     public String contactf(){
-        return "contact";
+        return "menu/contact";
     }
     //board-list폼
     @GetMapping("/board-list")

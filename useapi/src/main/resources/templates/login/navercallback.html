@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네이버 인증 완료</title>
+    <script defer src="js/index.js"></script>
+</head>
+<body>
+    <h4>네이버 인증이 완료되었습니다.</h4>
+    <input type="hidden" class="loginId" th:value="${session.id}"/>
+</body>
+<script>
+    let loginId = document.querySelector(".loginId").value
+    window.onload = function() {
+        
+        // sessionStorage.setItem("id",loginId);
+        // sessionStorage.setItem("name",name);
+        if( loginId === "sns 아이디 등록실패"){
+            alert("회원가입해주세요!");
+            
+            window.close();
+        }
+        else  {
+            // 새창 열기
+            // let newWindow = window.open('/design_guide', '_blank');
+            // $(newWindow).on('load', function() {
+    // AJAX 요청
+    // $.ajax({
+    //     url: "/design_guide",
+    //     type: "GET",
+    //     success: function(resp) {
+    //         let temp = $(resp).find(".designGuide");
+    //         // 새 창의 내용을 처리
+    //     $(".content").html(temp);
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error("Error:", error);
+    //     }
+    // });
+    window.opener.location.href="/index"
+    window.close();
+        }
+        // 자신(현재 창) 닫기
+       
+    }
+</script>
+</html>

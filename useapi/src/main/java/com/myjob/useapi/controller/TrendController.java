@@ -109,7 +109,7 @@ public class TrendController {
             mv.addObject("ratios2", subRatios2);
             mv.addObject("trendPager", pager);
            
-            mv.setViewName("dashboardshow");
+            mv.setViewName("menu/dashboardshow");
             return mv;
         }
 

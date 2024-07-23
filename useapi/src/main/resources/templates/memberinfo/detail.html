@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="change">
+            <h2 class="text-center text-primary mb-5 text-body-emphasis fw-bold">회원상세보기</h2>
+            <div >
+                <ul class="list-group col-md-5 text-center m-auto">
+                    <li class="list-group-item  list-group-item-primary text-primary-emphasis" >id:       [[${vo.id}]]</li>
+                    <li class="list-group-item list-group-item-secondary text-secondary-emphasis">name:       [[${vo.name}]]</li>
+                    <li class="list-group-item list-group-item-info text-success-emphasis">phone:     [[${vo.phone1}]]-[[${vo.phone2}]]-[[${vo.phone3}]]</li>
+                    <li class="list-group-item list-group-item-warning text-danger-emphasis ">address:      [[${vo.roadAddress}]] [[${vo.addressDetail}]]</li>
+                    <li class="list-group-item list-group-item-secondary text-warning-emphasis">email:     [[${vo.email}]]@[[${vo.email2}]]</li>
+                    <li class="list-group-item list-group-item-dark text-info-emphasis ">birthday:    [[${vo.birthday}]]</li>
+                  </ul>
+
+            </div>
+            <div class="photoSection">
+                <div class="container mt-5 ">
+                <h2 class="text-center text-info display-4 fst-italic">대표이미지</h2>
+                
+                <div class="photo_list row d-flex justify-content-center">
+                    <div class="col-md-2 mb-3">
+                        <div class="d-flex justify-content-center">
+                            <div class="img-container">
+                                <img class="repre" th:src="@{|upload/${vo.photo}|}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+            <style>
+                .img-container{
+                    width: 150px;
+                    height: 150px;
+                   
+                }
+                .img-container img{
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                }
+                .photo_list {
+                    gap: 5px; /* 이미지 간격을 5px로 설정 */
+                }
+            </style>
+            <div class="col-md-5 m-auto mt-3 mb-5" >
+
+                <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                    <button type="button" class="btn btn-outline-primary btnModify" onClick="modifyFrom()">수정</button>
+                    <button type="button" class="btn btn-outline-primary " onClick="btnChangePhoto()" >대표이미지 수정</button>
+                    <button type="button" class="btn btn-outline-primary" title="이미지파일을 등록하세요" onClick="regiPhoto()" >이미지등록</button>
+                    <button type="button" class="btn btn-outline-primary" onClick="btnGoHome()" >홈</button>
+                    <button type="button" class="btn btn-outline-primary" onClick="btnListForm()">목록</button>
+                </div>
+            </div>
+        </div> 
+           
+    </div>
+    
+</body>
+</html>

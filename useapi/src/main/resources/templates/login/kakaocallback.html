@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카카오 인증 완료</title>
+   
+</head>
+<body>
+    <h4>카카오 인증이 완료되었습니다.</h4>
+    <input type="hidden" class="loginId" th:value="${session.id}"/> 
+</body>
+<script>
+    window.onload = function() {
+        let loginId = document.querySelector(".loginId").value;
+        // sessionStorage.setItem("id",loginId);
+        // sessionStorage.setItem("name",name);
+        if( loginId === "sns 아이디 등록실패"){
+            alert("회원가입해주세요!");
+            
+            window.close();
+        
+        }else{
+
+            window.opener.location.href="/index";
+            window.close();
+        }
+       
+      
+    };
+</script>
+</html>

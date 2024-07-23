@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+<!--회원등록-->
+<insert id="register" parameterType="MemberVo">
+insert into users(id, name, password, email,email2 ,roadAddress,jibunAddress, phone1,phone2,phone3, addressDetail, birthday,gender) values(#{id}, #{name}, #{password}, #{email},
+#{email2}, #{roadAddress}, #{jibunAddress}, #{phone1}, #{phone2}, #{phone3} ,#{addressDetail}, #{birthday},#{gender})
+</insert>
+<!--사진/파일업로드-->
+<update id="fileUpload" parameterType="MemberVo">
+    update users set photo=#{photo} where id = #{id};
+    <if test="photos != null">
+        insert into photos(id, oriPhoto, photo) values
+        <foreach collection="photos" item="p" separator=",">
+            (#{id}, #{p.oriPhoto}, #{p.photo})
+        </foreach>
+    </if>   
+</update>
+<!--일반로그인-->
+<select id="login" parameterType="String" resultType="MemberVo">
+    <!-- select * from users where id like '%${id}%' or name like '%${name}%'  -->
+    select * from users where id=#{_parameter}
+</select>
+<!-- 아이디 중복확인 -->
+<select id="userIdchk" parameterType="String" resultType="MemberVo">
+    select id from users where id = #{id}
+</select>
+<!--mail로 받은 비번 로그인-->
+<select id="loginForgot" parameterType="map" resultType="MemberVo">
+    select * from users where id = #{id} and password = #{password}
+</select>
+<select id="takeInfo" parameterType="MemberVo" resultType="MemberVo">
+    select * from users where birthday = #{birthday} and name = #{name}
+</select>
+<select id="photos" parameterType="String" resultType="PhotoVo">
+    select sno, photo, oriPhoto, flag, nal from photos where id=#{_parameter}
+</select>
+<!--이름가져오기-->
+<select id="getName" parameterType="String" resultType="String">
+    select name from users where id=#{id}
+</select>
+<!--개인정보가져오기-->
+<select id="userId" parameterType="String" resultType="MemberVo">
+    select * from users where id=#{id}
+</select>
+<!--리스트에서 검색-->
+<select id="search" parameterType="String" resultType="MemberVo">
+    select * from users where id like '%${_parameter}%' or name like '%${_parameter}%' or addressDetail like '%${_parameter}%' or roadAddress like '%${_parameter}%' or jibunAddress like '%${_parameter}%' or phone1 like '%${_parameter}%' or phone2 like '%${_parameter}%' or phone3 like '%${_parameter}%'
+</select>
+<!--대표이미지-->
+<update id="changePhoto" parameterType="map">
+    update users set photo=#{photo} where id=#{id}
+</update>
+<!--default이미지 가져오기-->
+<select id="defaultPhoto" resultType="PhotoVo">
+    select * from photos where sno = 5
+</select>
+<!--sns naver 아이디 등록-->
+<update id="snsId" parameterType="MemberVo">
+    update users set naverId = #{naverId} where birthday = #{birthday} and name = #{name} 
+</update>
+<!--sns kakao 아이디 등록-->
+<update id="snskId" parameterType="MemberVo">
+    update users set kakaoId = #{kakaoId} where birthday = #{birthday} and name = #{name} 
+</update>
+<!--회원 정보 수정 비밀번호 포함-->
+<update id="updateWithPassword" parameterType="MemberVo">
+    update users set phone1=#{phone1}, phone2=#{phone2}, phone3=#{phone3}, roadAddress = #{roadAddress}, jibunAddress = #{jibunAddress}, addressDetail=#{addressDetail}, password=#{password} where id=#{id};
+    
+</update>
+<!--회원 정보 수정-->
+<update id="update" parameterType="MemberVo">
+    update users set phone1=#{phone1}, phone2=#{phone2}, phone3=#{phone3}, roadAddress = #{roadAddress}, jibunAddress = #{jibunAddress}, addressDetail=#{addressDetail} where id=#{id};
+    
+</update>
+<select id="code" parameterType="String" resultType="MemberManagerVo">
+    select * from  manager where mcode = #{mcode}
+</select>
+<select id="list" resultType="MemberVo">
+    select * from users 
+</select>
+<!--비번 찾기-->
+<select id="findPass" parameterType="map" resultType="MemberVo">
+select id , password from users where name=#{name} and email = #{email1} and email2 =#{email2}
+</select>
+<delete id="delete_files" parameterType="java.util.List">
+    delete from photos where oriphoto in <foreach collection="list" item="file" open="(" close=")" separator=",">
+    #{file}
+</foreach>
+</delete>
+<!-- 회원탈퇴-->
+<delete id="memberDelete" parameterType="String">
+    delete from users where id = #{_parameter};
+    delete from photos where id = #{_parameter};
+</delete> 
+</mapper>

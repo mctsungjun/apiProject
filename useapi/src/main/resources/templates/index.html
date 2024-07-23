@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
      <!-- Bootstrap icons-->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-  
+    <script src="js/naverKakaoLogin.js"></script>
 </head>
 <body>
     <header>
@@ -33,7 +33,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="javascript:openDashboard();" class="nav-link text-white">
+                  <a href="javascript:openDashboard();" class="nav-link text-white" >
                     <svg class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
                     데시보드
                   </a>
@@ -51,16 +51,19 @@
                   </a>
                 </li>
                 <li>
-                  <a href="javascript:boardList();" class="nav-link text-white">
+                  <a href="javascript:boardList();" class="nav-link text-white" >
                     <svg class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
                     게시판
                   </a>
                 </li>
               </ul>
+            
             </div>
           </div>
         </div>
-        <div class="px-3 py-2 border-bottom mb-3">
+      </header>
+        <th:block th:if = "${session.id eq null}">
+          <div class="px-3 py-2 border-bottom mb-3">
           <div class="container d-flex flex-wrap justify-content-end">
             <!-- <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
               <input type="search" class="form-control" placeholder="검색어" aria-label="Search">
@@ -72,7 +75,19 @@
             </div>
           </div>
         </div>
-      </header>
+        </th:block>
+        <th:block th:if = "${session.id ne null}">
+          <div class="px-3 py-2 border-bottom mb-3">
+            <div class="container d-flex flex-wrap justify-content-end">
+               <div class="text-end">
+            <span class="text-body-secondary" onclick="detailInfo();">[[${session.id}]]</span>님
+            <button type="button" class="btn btn-primary mx-3" onclick="btnLogout();">로그아웃</button>
+          </div>
+            </div>
+          </div>
+         
+        </th:block>
+      
       <div>
         <!--파일 붙이기-->
         <div class="content-change">
