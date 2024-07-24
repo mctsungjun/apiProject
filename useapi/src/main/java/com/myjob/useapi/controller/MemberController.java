@@ -41,6 +41,9 @@ public class MemberController {
  
     @Autowired
     KakaoApi kakaoApi;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
     
     public static String uploadPath= "H:\\job4project\\useapi\\src\\main\\resources\\static\\upload\\";
      
@@ -65,7 +68,13 @@ public class MemberController {
          // 주석 처리 표시 는 필용없음
          //System.out.println(id+"   "+password);
          Map<String, Object> response = new HashMap<>();
-         MemberVo vo = dao.login(id,password);
+         MemberVo vo = new MemberVo();
+         if(password.length()>=20){
+            vo = dao.loginForgot(id, password);
+         }else{
+
+             vo = dao.login(id,password);
+         }
          if(vo !=null){
              session.setAttribute("id", vo.getId());
              session.setAttribute("name", vo.getName());
@@ -353,6 +362,43 @@ public ModelAndView kakaoLogin(@RequestParam("code") String code, HttpSession se
             }
         }
         String msg = dao.modify(vo,delFiles);
+        return msg;
+    }
+
+    // 메일로 비번 보내주기
+    @RequestMapping(path="/sung/passSearch")
+    public ResponseEntity<Map<String,Object>> findPass(@RequestParam("name") String name,@RequestParam("email") String email){
+        String[] email1=email.split("@");
+        Map<String, Object> response = new HashMap<>();
+        int index = 1;
+        if(index >=0 && index<email1.length){
+            System.out.println(email1[0]+" "+email1[1]);
+            MemberVo vo = dao.findPass(name, email1[0].trim(), email1[1].trim());
+            if(vo !=null){
+                String id = vo.getId();
+                // 아이디/비번 메일로 보내주기
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setTo(email1[0]+"@"+email1[1]);
+                message.setSubject("아이디와 비번 보냅니다.");
+                message.setText("id:" + vo.getId()+" password: " +vo.getPassword());
+                javaMailSender.send(message);
+                response.put("message","ok");
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("message", "unknow");
+                return ResponseEntity.ok(response);
+            }
+        }else{
+            response.put("message","이메일을 다시적어주세요");
+            return ResponseEntity.ok(response);
+        }
+    }
+    //회원탈퇴
+    @RequestMapping(path = "/sung/memberOff")
+    public String memberOut(HttpSession session){
+        String id = (String)session.getAttribute("id");
+        session.setAttribute("id",null);
+        String msg = dao.memberDelete(id);
         return msg;
     }
 }

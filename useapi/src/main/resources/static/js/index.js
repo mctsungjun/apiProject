@@ -599,6 +599,49 @@ function userChk() {
 
     
 }
+// 아이디/비번 찿기
+function idpwSearch(){
+    let frm = document.idsearchForm2;
+    let name = document.getElementById("name");
+    let email = document.getElementById("email");
+    let form = new FormData(frm);
+    if(name == ""){
+        alert("이름을 입력해주세요.")
+        return;
+    }
+    if(email ==""){
+        alert("이메일을 입력해주세요.")
+        return;
+    }
+
+    $.ajax({
+        url:"/sung/passSearch",
+        type:"POST",
+        data:form,
+        processData: false, 
+		contentType: false,
+		success:(resp)=>{
+			if(resp.message==="ok"){
+				alert("메일로 보냈습니다.");
+			}else if(resp.message==="unKnown"){
+				alert("정보가 일치하지않습니다.");
+			}else{
+				alert(resp.message);
+			}
+        }
+    })
+}
+//회원탈되
+function btnMemberOut(){
+    $.ajax({
+        url:"/sung/memberOff",
+        type:"GET",
+        success:(resp)=>{
+            alert(resp);
+            location.reload(true);
+        }
+    })
+}
 //이메일 option값 input에 넣기-------------------------------------------
 function updateEmailInput(){
     var select = document.getElementById("email_sel");
