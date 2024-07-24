@@ -106,6 +106,15 @@ public class MemberController {
            mv.setViewName("memberinfo/detail");
            return mv;
        }
+       // 관리자 상세페이지 보기
+       @RequestMapping(path="/sung/detailM")
+       public ModelAndView detailM(String id){
+        ModelAndView mv = new ModelAndView();
+        MemberVo vo = dao.detail(id);
+        mv.addObject("vo", vo);
+        mv.setViewName("memberinfo/detail");
+        return mv;
+       }
        //이미지/파일 업로드
        @RequestMapping(path="/sung/upload")
        public String fileUpload(@RequestParam("files") MultipartFile[] photo, HttpSession session, @RequestParam("reprePhoto") String reprePhoto){
@@ -164,12 +173,13 @@ public class MemberController {
      String id = (String)session.getAttribute("id");
      MemberVo vo =dao.detail(id);
      mv.addObject("vo", vo);
-     mv.setViewName("sung/reprePhoto");
+     mv.setViewName("memberinfo/reprePhoto");
      return mv;
  }
  //대표이미지 바꾸기
      @RequestMapping(path="/sung/changePhoto")
-     public String changePhoto(String id, String photo){
+     public String changePhoto(HttpSession session, String photo){
+        String id = (String)session.getAttribute("id");
          String msg = dao.changePhoto(id, photo);
          return msg;
      }
@@ -182,7 +192,7 @@ public class MemberController {
          list = dao.list(code);
          System.out.println(list);
          mv.addObject("list", list);
-         mv.setViewName("sung/list");
+         mv.setViewName("memberInfo/list");
          return mv;
      }
  

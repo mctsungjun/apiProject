@@ -12,7 +12,7 @@
                 
         <div class="photo_list row">
             <div class="col-md-2 mb-3" th:each="p : ${vo.photos}">
-                <div class="d-flex justify-content-center">
+                <div class="row d-flex justify-content-center">
                     <div class="img-container">
                         <img class="mx-1" th:src="|upload/${p.photo}|"
                              th:class="${(vo.photo eq p.photo)? 'repre':''}"
@@ -20,7 +20,13 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btnRepreChange" >수정</button>
+        </div>
+        <div class="row d-flex justify-content-center">
+
+            <div class="col-md-5 d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-primary btnRepreChange" >수정</button>
+
+            </div>
         </div>
     </div>
     </div>

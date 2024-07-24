@@ -262,6 +262,86 @@ function btnUpdateCancel(){
     detailInfo();
 
 }
+//대표이미지 수정폼
+function btnChangePhoto(){
+    $.ajax({
+        url:"/sung/repreChangeForm",
+        type:"GET",
+        success:(resp)=>{
+            let temp = $(resp).find(".photoSection");
+            $(".photoSection").html(temp);
+            // 대표이미지수정
+            let btnRepreChange = document.querySelector(".btnRepreChange");
+            btnRepreChange.onclick=()=>{
+                
+                
+            
+                $.ajax({
+                    url:"/sung/changePhoto",
+                    type:"GET",
+                    data:{"photo":repreImage},
+                    success:(resp)=>{
+                        detailInfo();
+                    
+                    }
+                })
+            }
+        }
+    })
+}
+//이미지등록버튼 클릭됨-------------------------------------------------
+function regiPhoto() {
+	// photoSection의 내용을 새로운 내용으로 변경
+	var photoSection = document.querySelector('.photoSection');
+	photoSection.innerHTML = `
+	<div class="container mt-5">
+	<div class="col-md-5 m-auto">	
+	<label>
+			<h6 class="text-success fw-bolder">파일첨부<h6>
+			<input type="file" id="fileInput" class="form-control" name="files" multiple onChange="fileChange(this)"/>
+		</label>
+		<br/>
+		<button type="button" class="btn btn-outline-primary" onClick="uploadFiles()">업로드</button>
+		<fieldset class="repre">
+                    <legend>대표이미지를 선택해 주세요</legend>
+                </fieldset>
+	</div>
+	</div>
+	`;
+}
+
+// 목록으로 이동 (관리자만)
+let btnListForm = ()=>{
+	let managerCode = prompt("관리코드를 입력하세요");
+	if( managerCode !=null && managerCode !=""){
+		$.ajax({
+			url:"/sung/list",
+			type:"GET",
+			data:{"code":managerCode},
+			success:(resp)=>{
+				let temp =$(resp).find(".change");
+				$(".change").html(temp);
+			}
+		})
+	}
+}
+
+// 관리자 상세 페이지 보기
+function adminView(id){
+    $.ajax({
+        url:"/sung/detailM",
+        type:"POST",
+        data:{"id":id},
+        success:(resp)=>{
+            let temp =$(resp).find(".change");
+            $(".content-change").html(temp);
+        }
+    })
+}
+// 홈으로 이동---------------------------------------------
+function btnGoHome(){
+	location.href="/";
+}
 //비밀번호----------------------------------------------------------
 function text_chkpw() {
 	var form = document.querySelector("#pwd").value;
