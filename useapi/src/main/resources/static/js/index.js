@@ -262,6 +262,44 @@ function btnUpdateCancel(){
     detailInfo();
 
 }
+//update.html 의 수정버튼
+function btnModifyR(){
+    let frm = document.form;
+    let frmdata = new FormData(frm);
+    $.ajax({
+        url:"/sung/updateR",
+        type:"POST",
+        data:frmdata,
+        processData:false,
+        contentType:false,
+        success:(resp)=>{
+            console.log(resp)
+            detailInfo();
+        }
+    })
+}
+// update.html 파일 삭제 체크 박스에 체크
+function checkUp(checkbox){
+    var label = checkbox.parentNode;
+    if(checkbox.checked){
+        label.style.textDecoration = "line-through";
+        label.style.color="red";
+    }else{
+        label.style.textDecoration = "none";
+        label.style.color="";
+    }
+}
+
+//대표이미지 바뀔때 테두리변함
+let repreImage="";
+function change(tag,photo){
+    let allImg = document.querySelectorAll(".photo_list img");
+    allImg.forEach((img)=>{
+        img.style.border="5px solid #ffa500";
+    })
+    tag.style.border="5px solid #9400d3";
+    repreImage=photo;
+}
 //대표이미지 수정폼
 function btnChangePhoto(){
     $.ajax({
@@ -289,6 +327,8 @@ function btnChangePhoto(){
         }
     })
 }
+
+
 //이미지등록버튼 클릭됨-------------------------------------------------
 function regiPhoto() {
 	// photoSection의 내용을 새로운 내용으로 변경
@@ -308,6 +348,50 @@ function regiPhoto() {
 	</div>
 	</div>
 	`;
+}
+//대표이미지 선택
+function fileChange(tag){
+    let repre = document.querySelector(".repre");
+    repre.innerHTML = "";
+    let legend = document.createElement("legend");
+    legend.textContent = "대표이미지를 선택해 주세요";
+    repre.appendChild(legend);
+    for(f of tag.files){
+        console.log(f.name);
+        let chkbox = document.createElement('input');
+        let label = document.createElement('label');
+        let br = document.createElement('br');
+        chkbox.type='radio';
+        chkbox.name='photo';
+        chkbox.value=f.name;
+        label.textContent=f.name;
+        label.prepend(chkbox);
+        repre.append(label);
+        repre.append(br);
+    }
+}
+
+// 이미지upload클릭
+function uploadFiles(){
+    let input = document.getElementById("fileInput");
+    let frmData = new FormData();
+    let selectedPhoto = document.querySelector('input[name="photo"]:checked');
+    for(let i=0;i<input.files.length;i++){
+        frmData.append('files',input.files[i]);
+    }
+    if(selectedPhoto){
+        frmData.append("selectedPhoto",selectedPhoto.value);
+    }
+    $.ajax({
+        url:"/sung/upload",
+        type:"POST",
+        data:frmData,
+        processData:false,
+        contentType:false,
+        success:(resp)=>{
+            detailInfo();
+        }
+    })
 }
 
 // 목록으로 이동 (관리자만)

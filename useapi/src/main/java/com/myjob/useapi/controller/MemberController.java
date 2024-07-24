@@ -42,7 +42,7 @@ public class MemberController {
     @Autowired
     KakaoApi kakaoApi;
     
-    static String uploadPath= "C:/Users/sung/Desktop/projectSet/3차/2cha/project_v1/member/src/main/resources/static/upload/";
+    public static String uploadPath= "H:\\job4project\\useapi\\src\\main\\resources\\static\\upload\\";
      
      // 메인화면 보이기
      @RequestMapping(path="/")
@@ -112,12 +112,13 @@ public class MemberController {
         ModelAndView mv = new ModelAndView();
         MemberVo vo = dao.detail(id);
         mv.addObject("vo", vo);
+        mv.addObject("isadmin", true);
         mv.setViewName("memberinfo/detail");
         return mv;
        }
        //이미지/파일 업로드
        @RequestMapping(path="/sung/upload")
-       public String fileUpload(@RequestParam("files") MultipartFile[] photo, HttpSession session, @RequestParam("reprePhoto") String reprePhoto){
+       public String fileUpload(@RequestParam("files") MultipartFile[] photo, HttpSession session, @RequestParam("selectedPhoto") String reprePhoto){
          //ModelAndView mv = new ModelAndView();
          List<PhotoVo> photos = new ArrayList<>();
          MemberVo vo = new MemberVo();
@@ -321,5 +322,37 @@ public ModelAndView kakaoLogin(@RequestParam("code") String code, HttpSession se
     
     mv.setViewName("login/kakaocallback");
     return mv;
+    }
+
+    //수정정보 
+    @RequestMapping(path="/sung/updateR")
+    public String updateR(@RequestParam("files") List<MultipartFile> photo, String[] delFiles, @ModelAttribute MemberVo vo){
+        List<PhotoVo> photos = new ArrayList<>();
+        UUID uuid = null;
+        String sysFile = null;
+        if(photo !=null && photo.size()>0){
+            for(MultipartFile f : photo){
+                if(f.getOriginalFilename().equals("")){
+                    continue;
+                }
+                PhotoVo v = new PhotoVo();
+                uuid = UUID.randomUUID();
+                sysFile = String.format("%s-%s",uuid, f.getOriginalFilename());
+                File saveFile = new File(uploadPath+sysFile);
+                try{
+                    f.transferTo(saveFile);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                v.setPhoto(sysFile);
+                v.setOriPhoto(f.getOriginalFilename());
+                photos.add(v);
+            }
+            if(photos.size()>0){
+                vo.setPhotos(photos);
+            }
+        }
+        String msg = dao.modify(vo,delFiles);
+        return msg;
     }
 }

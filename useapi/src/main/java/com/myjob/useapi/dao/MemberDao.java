@@ -1,5 +1,8 @@
 package com.myjob.useapi.dao;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +10,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
+import com.myjob.useapi.controller.MemberController;
 import com.myjob.useapi.mybatis.MyFactory;
 import com.myjob.useapi.passHash.PasswordHash;
 import com.myjob.useapi.vo.MemberManagerVo;
@@ -301,5 +305,34 @@ public String getMemberName(String id){
         }
         session.close();
         return msg;
+    }
+    //회원수정
+    public String modify(MemberVo vo,String[] delFiles){
+        session = new MyFactory().getSession();
+        String msg="";
+        int cnt = session.update("member.update",vo);
+        if(cnt>0){
+            msg="정상 수정됨";
+            if(delFiles !=null){
+                List<String> deList = new ArrayList<>(Arrays.asList(delFiles));
+                //데이타베이스 파일 삭제
+                session.delete("member.delete_files",deList);
+                //폴더 파일 삭제
+                for(String delPhoto : delFiles){
+                    File delFile = new File(MemberController.uploadPath+delPhoto);
+                    if(delFile.exists()){
+                        delFile.delete();
+                    }
+                }
+                session.commit();
+               
+            }else{
+                msg="수정중 오류 발생";
+                session.rollback();
+            }
+            session.close();
+        }
+        return msg;
+
     }
 }

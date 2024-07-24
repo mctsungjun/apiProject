@@ -16,7 +16,7 @@
                        <h2 class="text-center text-primary mb-5 text-body-emphasis fw-bold mt-5">회원정보 수정</h2>
             <div class= "col-lg-auto">
             
-               <form name="frm" method="post" class="" enctype="multipart/form-data">
+               <form name="form" method="post" class="" enctype="multipart/form-data">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-12">
                         <label for="id" class="form-label text-primary">아이디</label>
@@ -102,7 +102,7 @@
                         <div th:each="p : ${vo.photos}">
                           <div  class="form-check">
                               <input type="checkbox" name="delFiles" class="chk form-check-input" id="flexCheck"
-                              th:onClick="checkUp(this)"    
+                              th:onclick="checkUp(this)"    
                               th:value="${p.oriPhoto}" th:text="${p.oriPhoto}">
                               <label class="form-check-label" for="flexCheck">
                                 </label>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-end">
-                            <button type="button" class="btnModifyR btn btn-primary  ">수정</button>
+                            <button type="button" class="btn btn-primary" onclick="btnModifyR();">수정</button>
                             <button type="button" class="btn btn-info mx-1" onclick="btnUpdateCancel();">취소</button> 
                         </div>
                         <div class="col-lg-6">
