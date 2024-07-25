@@ -74,9 +74,21 @@ function contact(){
 }
 // board-list불러오기
 function boardList(){
+    let board = {
+        "nowPage": 1,
+        "findStr":""
+    }
+    let data = {
+        url :"/board_list",
+        type :"GET",
+        param:{"nowPage":board.nowPage,"findStr":board.findStr}
+    }
+    sessionStorage.setItem("board",JSON.stringify(board));
+
     $.ajax({
-        url:"/board-list",
-        type:"GET",
+        url:data.url,
+        type:data.type,
+        data:data.param,
         success:(resp)=>{
             let temp = $(resp).find(".boardlist");
             $(".content-change").html(temp);

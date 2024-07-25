@@ -2,6 +2,7 @@ package com.myjob.useapi.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.myjob.useapi.dao.BoardDao;
+import com.myjob.useapi.page.PageOther;
 import com.myjob.useapi.vo.BoardVo;
 
 @Controller
@@ -63,13 +65,14 @@ public class MenuController {
         return "menu/contact";
     }
     //board-list폼
-    @GetMapping("/board-list")
-    public String boardList(Model model){
-        List<BoardVo> boards = new ArrayList<>();
-        boards = boardDao.boardList();
+    @GetMapping("/board_list")
+    public String boardList(Model model, PageOther pageOther){
+        System.out.println("ctrl : " + pageOther);
         
-        model.addAttribute("boards", boards);
-        return "board/board-list";
+        Map<String,Object> map = boardDao.boardList(pageOther);
+        model.addAttribute("map", map);
+        System.out.println(map);
+        return "board/board_list";
     }
     //board-register폼
     @GetMapping("/boardregister")

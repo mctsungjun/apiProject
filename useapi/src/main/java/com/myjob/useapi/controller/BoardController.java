@@ -1,5 +1,8 @@
 package com.myjob.useapi.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,11 +20,13 @@ public class BoardController {
     BoardDao boardDao;
 
     @RequestMapping(path="/board/detail")
-    public ModelAndView boardDetail(@RequestParam("id") String id){
+    public ModelAndView boardDetail(@RequestParam("sno") int sno){
         ModelAndView mv = new ModelAndView();
-        BoardVo board = boardDao.boardDetail(id);
-        mv.addObject("bo", board);
-        mv.setViewName("board/board-view");
+        Map<String,Object> map = new HashMap<>();
+        map = boardDao.boardDetail(sno);
+        mv.addObject("attFiles", map.get("attFiles"));
+        mv.addObject("bo", map.get("bo"));
+        mv.setViewName("board/board_view");
         return mv;
 
     }

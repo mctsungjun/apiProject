@@ -98,12 +98,27 @@ select id , password from users where name=#{name} and email = #{email1} and ema
     delete from photos where id = #{_parameter};
 </delete> 
 <!-- board -->
-
-<select id="detail" parameterType="String" resultType="BoardVo">
-    select * from board where id = #{_parameter}
+<!--상세보기-->
+<select id="boardDetail" parameterType="Integer" resultType="BoardVo">
+    select * from board where sno = #{_parameter}
+</select>
+<select id="attFiles" parameterType="Integer" resultType="BoardAtt">
+    select sno,pSno, oriFile, sysFile from boardatt where sno = #{_parameter}
 </select>
 
-<select id="boardList" resultType="BoardVo">
-    select * from board 
+<select id="boardSearch" parameterType="PageOther" resultType="BoardVo">
+    select sno, id, hit, date_format(nal, '%Y-%m-%d') nal,
+        concat(lpad('└', deep*12, <![CDATA['&nbsp;&nbsp;']]>),' ',  subject) subject
+    from board
+    where subject   like '%${findStr}%'
+    or    doc       like '%${findStr}%'
+    or    id        like '%${findStr}%'
+    order by grp desc, seq asc
+    limit #{startNo}, #{listSize}
+</select>
+
+<select id="totSize" parameterType="String" resultType="Integer">
+    select count(sno) from board where subject like '%${_parameter}%'
+    or doc like '%${_parameter}%' or id like '%${_parameter}'
 </select>
 </mapper>

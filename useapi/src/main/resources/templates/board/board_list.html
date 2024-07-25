@@ -9,8 +9,14 @@
     <div>
         <div class="boardlist">
                 <div class="container">
+                    <script type="module">
+                        import {list} from "./js/board.js"
+                        let ls = list();
+                        window.ls = ls;
+                        console.log(ls);
+                    </script>
                 <h2>게시판</h2>
-                <div>총 건수 : <span ></span></div>
+                <div>총 건수 :[[${map.page.totSize}]] <span ></span></div>
                 <form class="form-inline d-flex justify-content-end" method="POST">
                     <div class="form-group mx-sm-3 mb-2">
                         
@@ -31,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="list: ${boards}" th:onclick="boardDetail([[${list.id}]]);">
+                        <tr th:each="list: ${map.lists}" th:onclick="ls.boardDetail([[${list.sno}]]);">
                             <td th:text="${list.sno}">Mark</td>
                             <td th:text="${list.subject}">Otto</td>
                             <td th:text="${list.id}">홍길동</td>
@@ -43,15 +49,12 @@
                 <div class="container d-flex justify-content-center">
                     <nav aria-label="페이지 네비게이션">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" >이전</a>
+                        <li class="page-item btnPrev" th:class="${(map.page.nowPage>1)? 'btnPrev btnEnabled':'btnPrev btnDisabled'}">
+                            <a href="#" class="page-link " >이전</a>
                         </li>
-                        <li 
-                            >
-                            <a class="page-link pageAll" href="#" ></a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" >다음</a>
+                       
+                        <li class="page-item btnNext" th:class="${(map.page.totSize>map.page.endNo)?'btnNext btnEnabled':'btnNext btnDisabled'}">
+                            <a href="#" class="page-link "  >다음</a>
                         </li>
                     </ul>
                 </nav>
