@@ -17,7 +17,7 @@
                         <input type="text" class="form-control findStr" id="searchText" name="searchText"
                             value=>
                     </div>
-                    <button type="button" class="btn btn-light mb-2">검색</button>
+                    <button type="button" class="btn btn-light mb-2" onclick="boardSearch();">검색</button>
                     <button type="button" onclick="boardRegisterf();" class="btn btn-light mb-2">쓰기</button>
                 </form>
                 <table class="table table-striped">
@@ -31,12 +31,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr >
-                            <td >Mark</td>
-                            <td><a text= id=>Otto</a></td>
-                            <td >홍길동</td>
-                            <td >홍길동</td>
-                            <td >홍길동</td>
+                        <tr th:each="list: ${boards}" th:onclick="boardDetail([[${list.id}]]);">
+                            <td th:text="${list.sno}">Mark</td>
+                            <td th:text="${list.subject}">Otto</td>
+                            <td th:text="${list.id}">홍길동</td>
+                            <td th:text="${list.nal}">홍길동</td>
+                            <td th:text="${list.hit}">홍길동</td>
                         </tr>
                     </tbody>
                 </table>

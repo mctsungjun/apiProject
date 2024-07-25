@@ -1,65 +1,29 @@
 package com.myjob.useapi.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import com.myjob.useapi.dao.BoardDao;
+import com.myjob.useapi.vo.BoardVo;
+
+
+@RestController
 public class BoardController {
     
-    //메인 페이지
-    @GetMapping("/index")
-    public String index(){
-        return "index";
-    }
+    @Autowired
+    BoardDao boardDao;
 
-    //로그인 페이지
-    @GetMapping("/loginf")
-    public String loginF(){
-        return "login/login";
-    }
+    @RequestMapping(path="/board/detail")
+    public ModelAndView boardDetail(@RequestParam("id") String id){
+        ModelAndView mv = new ModelAndView();
+        BoardVo board = boardDao.boardDetail(id);
+        mv.addObject("bo", board);
+        mv.setViewName("board/board-view");
+        return mv;
 
-    //회원등록 페이지
-    @GetMapping("/registerf")
-    public String registerf(){
-        return "login/register";
-    }
-
-    //비밀번호 찾기페이지
-    @GetMapping("/passwordf")
-    public String findPasswordForm(){
-        return "login/password";
-    }
-
-    //dashBoard 페이지
-    @GetMapping("/dashboardf")
-    public String dashboardF(){
-        return "menu/dashboard";
-    }
-
-    // 아이디/비번찿기 폼
-    @GetMapping("/findIdPwf")
-    public String findIdPwF(){
-        return "login/findIdPw";
-    }
-    // shoping폼("/shopingf")
-    @GetMapping("/shopingf")
-    public String shopingf(){
-        return "menu/shop";
-    }
-    // contack폼
-    @GetMapping("/contactf")
-    public String contactf(){
-        return "menu/contact";
-    }
-    //board-list폼
-    @GetMapping("/board-list")
-    public String boardList(){
-        return "board/board-list";
-    }
-    //board-register폼
-    @GetMapping("/boardregister")
-    public String boardRegisterf(){
-        return "board/board-register";
     }
 
 }
