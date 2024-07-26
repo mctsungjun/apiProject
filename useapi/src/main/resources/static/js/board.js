@@ -2,7 +2,7 @@
 //게시판 관련 스크립트
 
 export function loadUrl(data){
-    let target = ".boardlist";
+    let target = ".content-change";
     let source = "#board";
     $.ajax({
         url : data.url,
@@ -32,6 +32,67 @@ export function list(){
             url  :"/board/detail",
             type :"GET",
             param:{"sno":sno,"nowPage":board.nowPage}
+        }
+        loadUrl(data);
+    }
+    document.querySelector(".boardRegister").onclick=()=>{
+        
+        let data={
+            url:"/board/boardregister",
+            type:"GET"
+        };
+        loadUrl(data);
+    }
+
+    document.querySelector(".boardSearch").onclick=()=>{
+        let findStr = document.getElementById("searchText").value;
+        console.log("findStr",findStr);
+        let board = JSON.parse(sessionStorage.getItem("board"));
+        board.nowPage = 1;
+        board.findStr = findStr;
+        sessionStorage.setItem("board",JSON.stringify(board));
+        let data={
+            url:"/board/boardSearch",
+            type:"GET",
+            param:{"nowPage":board.nowPage,"findStr":findStr}
+        }
+        loadUrl(data);
+    }
+    
+    document.querySelector(".btnPrev").onclick=()=>{
+        let findStr = document.querySelector(".findStr").value;
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        if(board.nowPage>1) board.nowPage -= 1;
+        board.findStr = findStr;
+        sessionStorage.setItem('board', JSON.stringify(board));
+        console.log("findStr", findStr, 'board', board);
+        let data={
+            url:"/board/boardSearch",
+            type:"GET",
+            param:{"nowPage":board.nowPage,"findStr":findStr}
+        }
+        loadUrl(data);
+
+
+    }
+
+    document.querySelector(".btnNext").onclick = ()=>{
+        let findStr = document.querySelector(".findStr").value;
+
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        
+        board.nowPage += 1;
+        board.findStr = findStr;
+
+        console.log("findStr", findStr, 'board', board);
+        sessionStorage.setItem("board", JSON.stringify(board));
+
+        let data = {
+            url:"/board/boardSearch",
+            type : "GET",
+            param : {"nowPage" : board.nowPage, "findStr" : findStr},
         }
         loadUrl(data);
     }

@@ -97,16 +97,16 @@ function boardList(){
     })
 }
 //board-list.html 의 쓰기 버튼 클릭시 이동
-function boardRegisterf(){
-    $.ajax({
-        url:"/boardregister",
-        type:"GET",
-        success:(resp)=>{
-            let temp = $(resp).find(".register");
-            $(".content-change").html(temp);
-        }
-    })
-}
+// function boardRegisterf(){
+//     $.ajax({
+//         url:"/boardregister",
+//         type:"GET",
+//         success:(resp)=>{
+//             let temp = $(resp).find(".register");
+//             $(".content-change").html(temp);
+//         }
+//     })
+// }
 
 // 네이버트랜드검색어 컨트롤러 보내기
 // let btnTrend = document.getElementById("btnTrend");

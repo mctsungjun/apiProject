@@ -108,7 +108,7 @@ select id , password from users where name=#{name} and email = #{email1} and ema
 
 <select id="boardSearch" parameterType="PageOther" resultType="BoardVo">
     select sno, id, hit, date_format(nal, '%Y-%m-%d') nal,
-        concat(lpad('└', deep*12, <![CDATA['&nbsp;&nbsp;']]>),' ',  subject) subject
+    concat(lpad('└', deep*12, <![CDATA['&nbsp;&nbsp;']]>),' ',  subject) subject
     from board
     where subject   like '%${findStr}%'
     or    doc       like '%${findStr}%'

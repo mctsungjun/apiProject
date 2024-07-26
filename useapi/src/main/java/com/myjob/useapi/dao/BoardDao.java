@@ -31,11 +31,12 @@ public class BoardDao {
     }
     public Map<String,Object> boardList(PageOther pageOther){
         session = new MyFactory().getSession();
+        pageOther.compute();
         List<BoardVo> lists = session.selectList("member.boardSearch",pageOther);
         int totSize = session.selectOne("member.totSize", pageOther.getFindStr());
         System.out.println(totSize);
         pageOther.setTotSize(totSize);
-        pageOther.compute();
+        
         Map<String,Object> map = new HashMap<>();
         map.put("lists",lists);
         map.put("page",pageOther);
@@ -43,4 +44,6 @@ public class BoardDao {
         return map;
 
     }
+
+   
 }

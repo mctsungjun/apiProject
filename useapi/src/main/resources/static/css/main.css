@@ -31,3 +31,11 @@
     left:50%;
     transform: translate(30%);
 } */
+#board .btnEnabled{
+    pointer-events: all;
+    
+}
+#board .btnDisabled{
+    pointer-events: none;
+    
+}

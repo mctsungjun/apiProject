@@ -74,10 +74,6 @@ public class MenuController {
         System.out.println(map);
         return "board/board_list";
     }
-    //board-register폼
-    @GetMapping("/boardregister")
-    public String boardRegisterf(){
-        return "board/board-register";
-    }
+   
 
 }
