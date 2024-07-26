@@ -99,15 +99,109 @@ export function list(){
     return {boardDetail}
 }
 
-// 게시판 상세보기
+// 게시판 상세보기 폼 에서 버튼클릭시
 
-//게시판 업데이트
 
-// let btnBoardUpdate = document.querySelector(".btnBoardUpdate");
-// let 
-// btnBoardUpdate.addEventListener("click",function(){
-//     $.ajax({
-//         url:"/board/boardUpdate",
+export function boardDetail(){
 
-//     })
-// })
+    let btnBoardUpdate = document.querySelector(".btnBoardUpdate");
+    
+ 
+    btnBoardUpdate.addEventListener("click",function(){
+       let sno = document.querySelector(".contentSno").value;
+       $.ajax({
+        url:"/board/boardUdate",
+        type:"POST",
+        data:{"sno":sno},
+        success:(resp)=>{
+            let temp = $(resp).find("#board");
+            $(".content-change").html(temp);
+        }
+       })
+       
+    })
+
+    let btnList = document.querySelector(".btnBoardList");
+    btnList.onclick=()=>{
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        let data = {
+            url:"/board/boardSearch",
+            type : "GET",
+            param : {"nowPage" : board.nowPage, "findStr" : board.findStr}
+        }
+        loadUrl(data);
+    }
+
+    let btnDelete = document.querySelector(".btnBoardDelete");
+    btnDelete.onclick=()=>{
+        let deleteId = document.querySelector(".deleteId").value;
+        let writeId = document.querySelector(".writeId").value;
+        let form = document.frmBoard;
+        let frmData = new FormData(form);
+        if(deleteId === writeId){
+            $.ajax({
+                url:"/board/boardDelete",
+                type:"POST",
+                data:frmData,
+                processData:false,
+                contentType:false,
+                success:(resp)=>{
+                    alert(resp);
+                    let temp = sessionStorage.getItem("board");
+                    let board = JSON.parse(temp);
+                    let data = {
+                        url:"/board/boardSearch",
+                        type : "GET",
+                        param : {"nowPage" : board.nowPage, "findStr" : board.findStr}
+                    }
+                    loadUrl(data);
+                }
+            }) 
+            }else{
+            alert("작성자가 아님.삭제불가");
+        }
+    }
+
+   
+}
+
+export function boardUpdate(){
+
+    document.getElementById("btnGoList").onclick=()=>{
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        let data = {
+            url:"/board/boardSearch",
+            type:"GET",
+            param:{"nowPage":board.nowPage,"findStr":board.findStr}
+        }
+        loadUrl(data);
+    }
+
+    document.querySelector(".btnUpdateR").onclick=()=>{
+        // let updateSno = document.querySelector(".updateSno").value;
+        let temp = document.frmBoard;
+        let frmData = new FormData(temp);
+        $.ajax({
+            url:"/board/board_update",
+            type:"POST",
+            data:frmData,
+            processData:false,
+            contentType:false,
+            success:(resp)=>{
+                console.log("update result: ",resp);
+                let temp = sessionStorage.getItem("board");
+                let board = JSON.parse(temp);
+                let data = {
+                    url:"/board/boardSearch",
+                    type:"GET",
+                    param:{"nowPage":board.nowPage,"findStr":board.findStr}
+                }
+                loadUrl(data);
+            }
+        })
+
+    }
+    
+}

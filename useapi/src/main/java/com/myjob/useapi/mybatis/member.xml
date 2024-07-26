@@ -103,7 +103,7 @@ select id , password from users where name=#{name} and email = #{email1} and ema
     select * from board where sno = #{_parameter}
 </select>
 <select id="attFiles" parameterType="Integer" resultType="BoardAtt">
-    select sno,pSno, oriFile, sysFile from boardatt where sno = #{_parameter}
+    select sno,pSno, orifile, sysfile from boardatt where psno = #{_parameter}
 </select>
 
 <select id="boardSearch" parameterType="PageOther" resultType="BoardVo">
@@ -116,9 +116,33 @@ select id , password from users where name=#{name} and email = #{email1} and ema
     order by grp desc, seq asc
     limit #{startNo}, #{listSize}
 </select>
-
+<!--register, update, repl-->
+<insert id="registerAtt" parameterType="Map">
+    insert into boardatt(psno, orifile, sysfile) values
+    <foreach collection="files" item="p" separator=",">
+        (#{psno},#{p.oriFile},#{p.sysFile})
+    </foreach>
+</insert>
 <select id="totSize" parameterType="String" resultType="Integer">
     select count(sno) from board where subject like '%${_parameter}%'
     or doc like '%${_parameter}%' or id like '%${_parameter}'
 </select>
+<update id="boardUpdater" parameterType="BoardVo">
+    update board set subject=#{subject}, doc=#{doc}
+    where sno=#{sno};
+</update>
+<!--삭제-->
+<select id="select_delfiles" parameterType="Integer" resultType="String">
+    select sysFile from boardatt where pSno=#{_parameter}
+</select>
+<delete id="boardDelete" parameterType="Integer">
+    delete from board where sno = #{_parameter}
+</delete>
+<delete id="delete_boardAtt" parameterType="Integer">
+    delete from boardatt where pSno = #{_parameter}
+</delete>
+<delete id="boardDelete_files" parameterType="java.util.List">
+    delete from boardatt where sysFile in <foreach collection="list" item="file" 
+    open="(" close=")" separator="," > #{file}</foreach>
+</delete>
 </mapper>
