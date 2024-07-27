@@ -163,6 +163,23 @@ export function boardDetail(){
         }
     }
 
+    document.querySelector(".btnRepl").onclick=()=>{
+
+        let temp = document.frmBoard;
+        let frmData = new FormData(temp);
+        $.ajax({
+            url:"/board/boardRepl",
+            type:"post",
+            data:frmData,
+            processData:false,
+            contentType:false,
+            success:(resp)=>{
+                let temp = $(resp).find("#board");
+                $(".content-change").html(temp);
+            }
+        })
+    }
+
    
 }
 
@@ -204,4 +221,69 @@ export function boardUpdate(){
 
     }
     
+}
+//쓰기
+export function boardRegister(){
+
+    document.querySelector(".btnList").onclick=()=>{
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        let data = {
+            url:"/board/boardSearch",
+            type:"GET",
+            param:{"nowPage":board.nowPage,"findStr":board.findStr}
+        }
+        loadUrl(data);
+
+    }
+
+    document.querySelector(".btnRegisterR").onclick=()=>{
+        let frmBoard = document.frmBoard;
+        let frmData = new FormData(frmBoard);
+        $.ajax({
+            url:"/board/boardRegisterR",
+            type:"POST",
+            data:frmData,
+            processData:false,
+            contentType:false,
+            success:(resp)=>{
+                console.log(resp);
+                let temp = sessionStorage.getItem("board");
+                let board = JSON.parse(temp);
+                let data = {
+                    url:"/board/boardSearch",
+                    type:"GET",
+                    param:{"nowPage":board.nowPage,"findStr":board.findStr}
+                }
+                loadUrl(data);
+            }
+        })
+        
+    }
+}
+
+export function boardRepl(){
+    document.querySelector(".btnRegisterR").onclick=()=>{
+           let frmBoard = document.frmBoard;
+    let frmData = new FormData(frmBoard);
+    $.ajax({
+        url:"/board/boardReplR",
+        type:"POST",
+        data:frmData,
+        processData:false,
+        contentType:false,
+        success:(resp)=>{
+            console.log(resp);
+            let temp = sessionStorage.getItem("board");
+            let board = JSON.parse(temp);
+            let data = {
+                url:"/board/boardSearch",
+                type:"GET",
+                param:{"nowPage":board.nowPage,"findStr":board.findStr}
+            }
+            loadUrl(data);
+        }
+    })
+    }
+ 
 }

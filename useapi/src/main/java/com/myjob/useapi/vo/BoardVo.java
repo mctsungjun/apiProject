@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class BoardVo {
     
-    int sno, grp, seq, deep, hit;
-    String nal, id, subject, doc, psno;
+    int sno, grp, seq, deep, hit,psno;
+    String nal, id, subject, doc;
 }

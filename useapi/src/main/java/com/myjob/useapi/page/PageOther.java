@@ -7,7 +7,7 @@ public class PageOther {
     
     int nowPage;
     int startNo, endNo;
-    int listSize=2;
+    int listSize=5;
     int totSize;
     String findStr;
 

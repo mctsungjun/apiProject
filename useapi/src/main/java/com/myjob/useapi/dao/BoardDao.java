@@ -27,10 +27,18 @@ public class BoardDao {
         session = new MyFactory().getSession();
         System.out.println(sno);
         Map<String,Object> map = new HashMap<>();
+        Map<String,Integer> map2 = new HashMap<>();
         BoardVo bo = session.selectOne("member.boardDetail", sno);
+        int hitplus = bo.getHit()+1;
+        System.out.println(hitplus);
+        // 조회수 증가하기
+        map2.put("sno", sno);
+        map2.put("phit",hitplus);
+        session.update("member.hitplus",map2);
         List<BoardAtt> attFiles = session.selectList("member.attFiles", sno);
         map.put("bo",bo);
         map.put("lists",attFiles);
+        session.commit();
         session.close();
         return map;
     }
@@ -134,6 +142,92 @@ public class BoardDao {
         }
 
 
+        return msg;
+    }
+    // 글 등록하기
+    public String boardRegister(BoardVo bo, List<BoardAtt> savefiles){
+        session = new MyFactory().getSession();
+        String msg="";
+        try{
+            //본문 내용 저장
+            int sno = session.selectOne("member.getSerial");
+            bo.setSno(sno);
+            bo.setPsno(sno);
+            bo.setGrp(sno);
+            int cnt = session.insert("member.boardRegisterR", bo);
+            if(cnt<=0) throw new Exception();
+
+            if(savefiles.size()>0){
+                Map<String,Object> map = new HashMap<>();
+                map.put("psno",sno);
+                map.put("files",savefiles);
+                cnt = session.insert("member.registerAtt", map);
+                if(cnt<=0) throw new Exception();
+            }
+            msg="정상처리";
+            session.commit();
+        }catch(Exception e){
+            msg="작업오류";
+            if(savefiles.size()>0){
+                List<String> deList = new ArrayList<>();
+                for(BoardAtt att: savefiles){
+                    deList.add(att.getSysFile());
+                }
+                for(String f: deList){
+
+                    File delfile = new File(BoardController.uploadPath+f);
+                    if(delfile.exists()) delfile.delete();
+                }
+            }
+            session.rollback();
+            e.printStackTrace();
+        }
+        return msg;
+
+      
+    }
+
+    //댓글
+    public String boardReplR(BoardVo bo, List<BoardAtt> files){
+        String msg = "";
+        session = new MyFactory().getSession();
+        
+        try{
+            bo.setPsno(bo.getSno());
+            int sno = session.selectOne("member.getSerial");
+            bo.setSno(sno);
+            // seq값 증가
+            session.update("member.seq_up",bo);
+            bo.setSeq(bo.getSeq()+1);
+            bo.setDeep(bo.getDeep()+1);
+            // System.out.println("psno: " +bo.getSno()+"seq: "+ bo.getSeq()+"deep: " +bo.getDeep());
+            int cnt = session.insert("member.boardRegisterR",bo);
+            System.out.println("dao: " +bo+"    "+files);
+            if(cnt<=0) throw new Exception();
+
+            if(files.size()>0){
+                Map<String,Object> map = new HashMap<>();
+                map.put("psno", bo.getSno());
+                map.put("files",files);
+                cnt = session.insert("member.registerAtt", map);
+                if(cnt<=0){throw new Exception();}
+            }
+            session.commit();
+            msg = "정상처리";
+        }catch(Exception e){
+            if(files.size()>0){
+                for(BoardAtt ba: files){
+                    String sysfile = ba.getSysFile();
+                    File file = new File(BoardController.uploadPath+sysfile);
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }
+            }
+            session.rollback();
+            msg = "오류발생";
+        }
+        session.close();
         return msg;
     }
 

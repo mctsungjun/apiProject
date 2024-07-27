@@ -123,6 +123,19 @@ select id , password from users where name=#{name} and email = #{email1} and ema
         (#{psno},#{p.oriFile},#{p.sysFile})
     </foreach>
 </insert>
+<!--등록-->
+<insert id="boardRegisterR" parameterType="BoardVo">
+    insert into board(id, subject, doc, nal, hit, sno, grp, seq, deep, psno)
+    values(#{id}, #{subject}, #{doc}, now(), 0, #{sno}, #{grp}, #{seq}, #{deep}, #{psno})
+</insert>
+<!--조회수 증가-->
+<update id="hitplus" parameterType="Map">
+    update board set hit=#{phit} where sno = #{sno}
+</update>
+<!--getserial-->
+<select id="getSerial" resultType="Integer">
+    select getSerial('i')
+</select>
 <select id="totSize" parameterType="String" resultType="Integer">
     select count(sno) from board where subject like '%${_parameter}%'
     or doc like '%${_parameter}%' or id like '%${_parameter}'
@@ -130,6 +143,9 @@ select id , password from users where name=#{name} and email = #{email1} and ema
 <update id="boardUpdater" parameterType="BoardVo">
     update board set subject=#{subject}, doc=#{doc}
     where sno=#{sno};
+</update>
+<update id="seq_up" parameterType="BoardVo">
+    update board set seq=seq+1 where seq > #{seq} and grp=#{grp}
 </update>
 <!--삭제-->
 <select id="select_delfiles" parameterType="Integer" resultType="String">

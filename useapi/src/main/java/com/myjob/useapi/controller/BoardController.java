@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+
 import com.myjob.useapi.dao.BoardDao;
 import com.myjob.useapi.page.PageOther;
 import com.myjob.useapi.vo.BoardAtt;
@@ -57,6 +57,7 @@ public class BoardController {
     @RequestMapping(path="/board/boardSearch")
     public ModelAndView boardSearch(PageOther pageOther, HttpSession session){
         ModelAndView mv = new ModelAndView();
+        System.out.println("page: " +pageOther);
         Map<String, Object> map = boardDao.boardList(pageOther);
         session.setAttribute("findStr", pageOther.getFindStr());
         
@@ -75,7 +76,7 @@ public class BoardController {
         System.out.println(id);
         Map<String,Object> map = new HashMap<>();
         map = boardDao.boardDetail(sno);
-        mv.addObject("attFiles", map.get("attFiles"));
+        mv.addObject("attFiles", map.get("lists"));
         mv.addObject("bo", map.get("bo"));
         mv.setViewName("/board/board_update");
         return mv;
@@ -123,4 +124,78 @@ public class BoardController {
         return msg;
     }
 
+    //글쓰기
+    @RequestMapping(path="/board/boardRegisterR")
+    public String boardRegister(BoardVo bo, @RequestParam("files") List<MultipartFile> files){
+        String msg = "";
+        UUID uuid = null;
+        String sysfile = "";
+        
+        List<BoardAtt> saveFile = new ArrayList<>();
+        if(files.size()>0){
+            for(MultipartFile f: files){
+                if(f.getOriginalFilename().equals("")) continue;
+                uuid = UUID.randomUUID();
+                sysfile = String.format("%s-%s",uuid,sysfile);
+
+                BoardAtt att = new BoardAtt();
+                att.setOriFile(f.getOriginalFilename());
+                att.setSysFile(sysfile);
+                saveFile.add(att);
+                File file = new File(uploadPath+sysfile);
+                try{
+                    f.transferTo(file);
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        
+        msg = boardDao.boardRegister(bo,saveFile);
+        return msg;
+
+    }
+    //댓글 폼
+    @RequestMapping(path="/board/boardRepl")
+    public ModelAndView boardRepl(BoardVo boardVo){
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("bo", boardVo);
+        mv.setViewName("board/board_repl");
+        return mv;
+    }
+    //댓글 쓰기
+    @RequestMapping(path="/board/boardReplR")
+    public String boardReplR(BoardVo boardVo, @RequestParam("files") List<MultipartFile> files){
+        System.out.println("컨트롤러: " + boardVo);
+        String msg="";
+        String sysfile="";
+        UUID uuid = null;
+        List<BoardAtt> savefiles = new ArrayList<>(); 
+        if(files.size()>0){
+            for(MultipartFile f: files){
+                if(f.getOriginalFilename().equals("")) continue;
+                uuid = UUID.randomUUID();
+                sysfile = String.format("%s-%s",uuid,f.getOriginalFilename());
+                BoardAtt att = new BoardAtt();
+                att.setOriFile(f.getOriginalFilename());
+                att.setSysFile(sysfile);
+                savefiles.add(att);
+                File file = new File(BoardController.uploadPath+sysfile);
+                try{
+                    f.transferTo(file);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                
+                
+                
+                
+            }
+        }
+        msg = boardDao.boardReplR(boardVo, savefiles);
+        return msg;
+    }
 }
+
