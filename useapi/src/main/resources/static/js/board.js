@@ -104,11 +104,14 @@ export function list(){
 
 export function boardDetail(){
 
+    let deleteId = document.querySelector(".deleteId").value;
+    let writeId = document.querySelector(".writeId").value;
     let btnBoardUpdate = document.querySelector(".btnBoardUpdate");
     
  
     btnBoardUpdate.addEventListener("click",function(){
        let sno = document.querySelector(".contentSno").value;
+       if(deleteId === writeId){
        $.ajax({
         url:"/board/boardUdate",
         type:"POST",
@@ -118,6 +121,9 @@ export function boardDetail(){
             $(".content-change").html(temp);
         }
        })
+    }else{
+        alert("작성자가 아님.삭제불가");
+    }
        
     })
 
@@ -135,19 +141,20 @@ export function boardDetail(){
 
     let btnDelete = document.querySelector(".btnBoardDelete");
     btnDelete.onclick=()=>{
-        let deleteId = document.querySelector(".deleteId").value;
-        let writeId = document.querySelector(".writeId").value;
+        
         let form = document.frmBoard;
         let frmData = new FormData(form);
         if(deleteId === writeId){
-            $.ajax({
+            let yn= confirm("삭제하시겠습니까?");
+            if (yn===true){
+                    $.ajax({
                 url:"/board/boardDelete",
                 type:"POST",
                 data:frmData,
                 processData:false,
                 contentType:false,
                 success:(resp)=>{
-                    alert(resp);
+                    // alert(resp);
                     let temp = sessionStorage.getItem("board");
                     let board = JSON.parse(temp);
                     let data = {
@@ -158,8 +165,10 @@ export function boardDetail(){
                     loadUrl(data);
                 }
             }) 
+            }
+        
             }else{
-            alert("작성자가 아님.삭제불가");
+            alert("작성자가 아님.수정불가");
         }
     }
 
@@ -167,7 +176,8 @@ export function boardDetail(){
 
         let temp = document.frmBoard;
         let frmData = new FormData(temp);
-        $.ajax({
+        if(deleteId !== null && deleteId !==""){
+            $.ajax({
             url:"/board/boardRepl",
             type:"post",
             data:frmData,
@@ -177,7 +187,11 @@ export function boardDetail(){
                 let temp = $(resp).find("#board");
                 $(".content-change").html(temp);
             }
-        })
+        }) 
+        }else{
+            alert("로그인하세요.")
+        }
+       
     }
 
    
@@ -284,6 +298,18 @@ export function boardRepl(){
             loadUrl(data);
         }
     })
+    }
+
+    document.querySelector(".btnList").onclick=()=>{
+        let temp = sessionStorage.getItem("board");
+        let board = JSON.parse(temp);
+        let data = {
+            url:"/board/boardSearch",
+            type:"GET",
+            param:{"nowPage":board.nowPage,"findStr":board.findStr}
+        }
+        loadUrl(data);
+
     }
  
 }
