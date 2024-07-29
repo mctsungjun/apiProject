@@ -22,6 +22,8 @@ public class MemberVo {
     String phone2;
     String phone3;
     String jibunAddress;
+   
     String photo; //대표사진
     List<PhotoVo> photos;
+
 }

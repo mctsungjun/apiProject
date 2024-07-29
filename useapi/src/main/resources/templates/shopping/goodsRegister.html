@@ -1,0 +1,130 @@
+
+<!doctype html>
+<html lang="ko">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>Checkout</title>
+
+  
+  </head>
+  <body class="bg-body-tertiary">
+    <div >
+   <div class="container goodsRegister">
+	<script>
+		function btnProductRegi(){
+            let frm = document.newProduct;
+            let frmData = new FormData(frm);
+            $.ajax({
+                url:"/productRegister",
+                type:"post",
+                data:frmData,
+                processData:false,
+                contentType:false,
+                success:(resp)=>{
+            
+
+                let temp =$(resp).find(".shoping");
+                $(".content-change").html(temp);
+        }
+    })
+    }
+		
+	</script>
+		<div class="container">
+			<h1 >상품 등록 </h1>
+		</div>
+	
+	
+	<div class="container">
+		<form name="newProduct" id="newProduct"
+		class="form-horizontal" method="post" enctype="multipart/form-data">
+			<!-- <div class="form-group row mb-1 mt-5">
+				<label class="col-sm-2">상품 코드</label>
+				<div class="col-sm-3">
+					<input type="text" name="goodsCode" class="form-control" readonly>
+				</div>
+			</div> -->
+			
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">상품명</label>
+				<div class="col-sm-3">
+					<input type="text" name="goodsName" class="form-control">
+				</div>
+			</div>
+		
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">가격</label>
+				<div class="col-sm-3">
+					<input type="text" name="goodsPrice" class="form-control">
+				</div>
+			</div>
+			
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">상세 정보</label>
+				<div class="col-sm-3">
+					<textarea name="description" cols="50" rows="7" disabled></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">제조사</label>
+				<div class="col-sm-3">
+					<input type="text" name="manufacturer" class="form-control" disabled>
+				</div>
+			</div>
+			
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">분류</label>
+				<div class="col-sm-3">
+					<input type="text" name="category" class="form-control" disabled>
+				</div>
+			</div>
+			
+			<div class="form-group row mb-1">
+				<label class="col-sm-2">재고 수</label>
+				<div class="col-sm-3">
+					<input type="text" name="unitsInStock" class="form-control" disabled>
+				</div>
+			</div>
+			
+			<div class="form-group row mb-4">
+				<label class="col-sm-2">상태</label>
+				<div class="col-sm-5">
+					<input type="radio" name="condition" value="New" disabled >
+					신규 제품
+					<input type="radio" name="condition" value="Old " disabled>
+					중고 제품
+					<input type="radio" name="condition" value="Refurbished " disabled>
+					재생 제품
+				</div>
+			</div>
+            <div class="form-group row mb-1">
+				<label class="col-sm-2">재품사진</label>
+				<div class="col-sm-3">
+					<input type="file" name="unitsPhoto" class="form-control">
+				</div>
+			</div>
+			
+			
+		</form>
+		<div class="form-group row mb-3">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="button" class="btn btn-primary" onclick="btnProductRegi();">등록</button>
+			</div>
+		</div>
+		
+	</div>
+
+  
+</div>
+   
+    </div>
+	
+
+</body>
+</html>

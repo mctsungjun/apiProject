@@ -1,6 +1,7 @@
 package com.myjob.useapi.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.myjob.useapi.dao.BoardDao;
+import com.myjob.useapi.dao.GoodsDao;
 import com.myjob.useapi.page.PageOther;
-import com.myjob.useapi.vo.BoardVo;
+
+import com.myjob.useapi.vo.GoodsVo;
 
 @Controller
 public class MenuController {
 
+     @Autowired
+    GoodsDao goodsDao;
     @Autowired
     BoardDao boardDao;
     
@@ -56,7 +61,14 @@ public class MenuController {
     }
     // shoping폼("/shopingf")
     @GetMapping("/shopingf")
-    public String shopingf(){
+    public String shopingf(Model model){
+         Map<String,Object> map = new HashMap<>();
+        List<GoodsVo> gv = new ArrayList<>();
+        
+        gv = goodsDao.goodsBri();
+        map.put("code","f");
+        map.put("gv",gv);
+        model.addAttribute("map", map);
         return "menu/shop";
     }
     // contack폼

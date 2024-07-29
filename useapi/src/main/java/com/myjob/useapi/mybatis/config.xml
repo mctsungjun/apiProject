@@ -11,6 +11,9 @@
 		<typeAlias type="com.myjob.useapi.vo.BoardVo" alias="BoardVo" />
 		<typeAlias type="com.myjob.useapi.page.PageOther" alias="PageOther" />
 		<typeAlias type="com.myjob.useapi.vo.BoardAtt" alias="BoardAtt" />
+		<typeAlias type="com.myjob.useapi.vo.GoodsVo" alias="GoodsVo" />
+		<typeAlias type="com.myjob.useapi.vo.ProductPhoto" alias="ProductPhoto" />
+		<typeAlias type="com.myjob.useapi.vo.GoodsCart" alias="GoodsCart" />
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">

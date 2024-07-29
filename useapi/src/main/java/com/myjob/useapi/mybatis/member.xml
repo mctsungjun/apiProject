@@ -161,4 +161,31 @@ select id , password from users where name=#{name} and email = #{email1} and ema
     delete from boardatt where sysFile in <foreach collection="list" item="file" 
     open="(" close=")" separator="," > #{file}</foreach>
 </delete>
+
+<!--쇼핑-->
+<!--상품등록-->
+<insert id="goodsRegister" parameterType="GoodsVo">
+    insert into goods(goodsName, goodsPrice) values(#{goodsName},#{goodsPrice})
+</insert>
+<insert id="goodsRegisterPhoto" parameterType="Map">
+    insert into productphoto(goodsName,orifile,sysfile) values
+    <foreach collection="photos" item="p" separator=",">
+        (#{name},#{p.orifile},#{p.sysfile})
+    </foreach>
+</insert>
+<!--불러오기-->
+<select id="goodsBri" resultType="GoodsVo">
+    select * from goods
+</select>
+<select id="goodsPhotoBri" resultType="ProductPhoto">
+    select * from productPhoto
+</select>
+<insert id="addCodeUserOrder" parameterType="Map">
+    insert into userorder(id, orderCode) values(#{id}, #{order})
+   
+</insert>
+<insert id="cartAdd"  parameterType="Map">
+    insert into goodscart(ordercode, goodsName) values (#{code}, #{name})
+ 
+</insert>
 </mapper>
