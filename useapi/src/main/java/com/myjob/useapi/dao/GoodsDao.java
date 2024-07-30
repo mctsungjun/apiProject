@@ -102,19 +102,31 @@ public class GoodsDao {
         int goodsPrice =session.selectOne("member.getprice", goodsName);
 
         System.out.println(goodsPrice);
+        int checkName = session.selectOne("member.checkName",goodsName);
+        System.out.println(checkName);
         Map<String,Object> cart = new HashMap<>();
         cart.put("code", code);
         cart.put("name",goodsName);
         cart.put("price",goodsPrice);
-        int cnt = session.insert("member.cartAdd", cart);
-        if(cnt>0){
+        if(checkName==0){
+            int cnt = session.insert("member.cartAdd", cart);
+            session.commit();
+            if(cnt>0){
+                msg="장바구니추가";
+                session.commit();
+    
+            }else{
+                msg="오류발생";
+                session.rollback();
+            } 
+        }else{
+            session.update("member.cartAddEa",goodsName);
             msg="장바구니추가";
             session.commit();
-
-        }else{
-            msg="오류발생";
-            session.rollback();
         }
+
+        
+    
         session.close();
         return msg;
    }
@@ -140,6 +152,7 @@ public class GoodsDao {
    public List<GoodsVo> getGoods(String orderCode){
     session = new MyFactory().getSession();
     List<GoodsVo> list = session.selectList("member.getGoodsVoList", orderCode);
+    System.out.println(list);
     session.commit();
     session.close();
     return list;

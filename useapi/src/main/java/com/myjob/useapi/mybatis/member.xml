@@ -198,6 +198,13 @@ select id , password from users where name=#{name} and email = #{email1} and ema
     update userorder set ordered = #{change} where orderCode = #{orderCode}
 </update>
 <select id="getGoodsVoList" parameterType="String" resultType="GoodsVo">
-    select goodsName, goodsprice from goodscart where ordercode = #{_parameter}
+    select goodsName, goodsprice, ea from goodscart where ordercode = #{_parameter}
+</select >
+<select id="checkName" parameterType="String" resultType="Integer">
+
+    select count(*) from goodscart where goodsName = #{_parameter}
 </select>
+<update id="cartAddEa" parameterType="String">
+    update goodscart set ea = ea+1 where goodsName = #{_parameter}
+</update>
 </mapper>

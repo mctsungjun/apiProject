@@ -11,13 +11,14 @@ public class GoodsCart {
     String orderCode;
     String goodsName;
     String goodsPrice;
+    int ea;
     List<GoodsVo> orders;
 
     public int goodsCal(){
         int sum = 0;
         if(orders.size()>0){
             for(GoodsVo order: orders){
-                sum = sum + order.goodsPrice;
+                sum = sum + (order.goodsPrice*order.ea);
             }
         }
         return sum;

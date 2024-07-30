@@ -34,14 +34,15 @@
               <h6 class="my-0" th:text="${li.goodsName}">Product name</h6>
              
             </div>
-            <span class="text-body-secondary" th:text="${li.goodsPrice}">$12</span>
+            <span class="text-body-secondary" th:text="${li.goodsPrice+'원'}">$12</span>
+            <span class="text-body-secondary" th:text="${li.ea+'EA'}"></span>
           </li>
        
         
         
           <li class="list-group-item d-flex justify-content-between">
             <span>합계</span>
-            <strong th:text="${sum}">$20</strong>
+            <strong th:text="${sum+'원'}">$20</strong>
           </li>
         </ul>
 

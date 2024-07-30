@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class GoodsVo {
     
-    int goodsCode, goodsPrice;
+    int goodsCode, goodsPrice, ea;
     String goodsName;
     String sysfile;
     
