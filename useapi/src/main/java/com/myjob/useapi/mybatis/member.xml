@@ -177,6 +177,9 @@ select id , password from users where name=#{name} and email = #{email1} and ema
 <select id="goodsBri" resultType="GoodsVo">
     select * from goods
 </select>
+<select id="getprice" parameterType="String" resultType="Integer" >
+    select goodsprice from goods where goodsName = #{goodsName}
+</select>
 <select id="goodsPhotoBri" resultType="ProductPhoto">
     select * from productPhoto
 </select>
@@ -185,7 +188,16 @@ select id , password from users where name=#{name} and email = #{email1} and ema
    
 </insert>
 <insert id="cartAdd"  parameterType="Map">
-    insert into goodscart(ordercode, goodsName) values (#{code}, #{name})
+    insert into goodscart(ordercode, goodsName,goodsPrice) values (#{code}, #{name},#{price})
  
 </insert>
+<select id="getOrderCode" parameterType="String" resultType="UserOrder">
+    select * from userorder where id = #{_parameter}
+</select>
+<update id="changeOrdered" parameterType="Map">
+    update userorder set ordered = #{change} where orderCode = #{orderCode}
+</update>
+<select id="getGoodsVoList" parameterType="String" resultType="GoodsVo">
+    select goodsName, goodsprice from goodscart where ordercode = #{_parameter}
+</select>
 </mapper>

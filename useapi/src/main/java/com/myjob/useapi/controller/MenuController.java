@@ -66,7 +66,7 @@ public class MenuController {
         List<GoodsVo> gv = new ArrayList<>();
         
         gv = goodsDao.goodsBri();
-        map.put("code","f");
+       
         map.put("gv",gv);
         model.addAttribute("map", map);
         return "menu/shop";

@@ -26,40 +26,22 @@
       <div class="col-md-5 col-lg-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">장바구니</span>
-          <span class="badge bg-primary rounded-pill">3</span>
+          <span class="badge bg-primary rounded-pill" th:text="${list.size()}">3</span>
         </h4>
         <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
+          <li class="list-group-item d-flex justify-content-between lh-sm" th:each="li:${list}">
             <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-body-secondary">Brief description</small>
+              <h6 class="my-0" th:text="${li.goodsName}">Product name</h6>
+             
             </div>
-            <span class="text-body-secondary">$12</span>
+            <span class="text-body-secondary" th:text="${li.goodsPrice}">$12</span>
           </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">−$5</span>
-          </li>
+       
+        
+        
           <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
+            <span>합계</span>
+            <strong th:text="${sum}">$20</strong>
           </li>
         </ul>
 
@@ -76,7 +58,7 @@
           <div class="row g-3">
             <div class="col-8">
               <label for="firstName" class="form-label">이름</label>
-              <input type="text" class="form-control" id="Name" placeholder="" value="" required>
+              <input type="text" class="form-control" id="Name" th:value="${vo.name}">
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
@@ -88,7 +70,7 @@
               <label for="username" class="form-label">이메일</label>
               <div class="input-group has-validation">
                 <span class="input-group-text">@</span>
-                <input type="text" class="form-control" id="username" placeholder="이메일" required>
+                <input type="text" class="form-control" id="username" th:value="${vo.email+'@'+vo.email2}">
               <div class="invalid-feedback">
                   Your username is required.
                 </div>
@@ -118,9 +100,9 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-12">
                         <label for="inputAddress2" class="form-label"><span class="text-danger"></span>상세주소</label>
-                        <input type="text" class="form-control" name="roadAddress" id="roadAddress" >
-                        <input type="text" class="form-control mt-1" name="jibunAddress" id="jibunAddress" >
-                        <input type="text" class="form-control" id="addressDetail"  name="addressDetail" >
+                        <input type="text" class="form-control" name="roadAddress" id="roadAddress" th:value="${vo.roadAddress}">
+                        <input type="text" class="form-control mt-1" name="jibunAddress" id="jibunAddress" th:value="${vo.jibunAddress}">
+                        <input type="text" class="form-control" id="addressDetail"  name="addressDetail" th:value="${vo.addressDetail}">
                     </div>
                 </div>
               <!--휴대번호-->
@@ -130,7 +112,7 @@
                 
                     <div class="col d-flex align-text-center">
                         <select name="phone1" id="phone1" class="form-select">
-                            <option value="010">010</option>
+                            <option value="010" th:selected="${vo.phone1 == '010'}">010</option>
                             <option value="011">011</option>
                             <option value="016">016</option>
                             <option value="017">017</option>
@@ -138,9 +120,9 @@
                             <option value="019">019</option>
                         </select>
                         <span class="hyphen">-</span>
-                        <input type="text" class="form-control mx-1" name="phone2"  >
+                        <input type="text" class="form-control mx-1" name="phone2" th:value="${vo.phone2}" >
                         <span class="hyphen">-</span>
-                        <input type="text" class="form-control mx-1" name="phone3" >
+                        <input type="text" class="form-control mx-1" name="phone3" th:value="${vo.phone3}">
                     </div>
                 </div>
                 

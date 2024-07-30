@@ -13,6 +13,7 @@ import com.myjob.useapi.controller.ShopController;
 import com.myjob.useapi.mybatis.MyFactory;
 import com.myjob.useapi.vo.GoodsVo;
 import com.myjob.useapi.vo.ProductPhoto;
+import com.myjob.useapi.vo.UserOrder;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -63,7 +64,7 @@ public class GoodsDao {
         return goods;
     }
     // 주문코드생성
-    public String orderCode(String id){
+    public String orderCode(String id, HttpSession se){
         String orderCode="";
         session = new MyFactory().getSession();
           String orderTime = String.valueOf(System.currentTimeMillis());
@@ -76,6 +77,8 @@ public class GoodsDao {
             orderCode = "od"+orderTime+(ShopController.cnt+1); 
            
         }
+        se.setAttribute("orderCode", orderCode);
+
         Map<String,String> code = new HashMap<>();
       
         code.put("order",orderCode);
@@ -96,9 +99,13 @@ public class GoodsDao {
         String msg="";
         session = new MyFactory().getSession();
         String goodsName =vo.getGoodsName();
-        Map<String,String> cart = new HashMap<>();
+        int goodsPrice =session.selectOne("member.getprice", goodsName);
+
+        System.out.println(goodsPrice);
+        Map<String,Object> cart = new HashMap<>();
         cart.put("code", code);
         cart.put("name",goodsName);
+        cart.put("price",goodsPrice);
         int cnt = session.insert("member.cartAdd", cart);
         if(cnt>0){
             msg="장바구니추가";
@@ -111,4 +118,31 @@ public class GoodsDao {
         session.close();
         return msg;
    }
+   // 주문코드 가지고 오기
+   public String getOrderCode(String id){
+    session = new MyFactory().getSession();
+    String orderCode = "";
+    UserOrder uo = session.selectOne("member.getOrderCode", id);
+    if(uo.getOrdered()=='f'){
+         orderCode = uo.getOrderCode();
+    }else{
+        Map<String,String> map = new HashMap<>();
+        map.put("orderCode", uo.getOrderCode());
+        map.put("change","t");
+        session.update("member.changeOrdered", map);
+        orderCode="empty";
+    }
+    session.commit();
+    session.close();
+    return orderCode;
+   }
+   //카트 목록 가져오기
+   public List<GoodsVo> getGoods(String orderCode){
+    session = new MyFactory().getSession();
+    List<GoodsVo> list = session.selectList("member.getGoodsVoList", orderCode);
+    session.commit();
+    session.close();
+    return list;
+   }
+
 }

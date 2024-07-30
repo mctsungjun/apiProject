@@ -3,16 +3,22 @@
 
 
 export function checkout(){
-    
+    let sessionId = document.getElementById("sessionId").value;
+   
     document.querySelector(".checkout").onclick=()=>{
-        $.ajax({
-            url:"/checkout",
-            type:"GET",
-            success:(resp)=>{
-                let temp = $(resp).find(".payment");
-                $(".content-change").html(temp);
-            }
-        })
+        if(sessionId != null && sessionId.trim() != "" ){
+        
+            $.ajax({
+                url:"/gotoPayment",
+                type:"POST",
+                success:(resp)=>{
+                    let temp = $(resp).find(".payment");
+                    $(".content-change").html(temp);
+                }
+            })
+        }else{
+            alert("로그인하세요.")
+        }
     }
     //장바구니 추가
     // function increaseCart(){

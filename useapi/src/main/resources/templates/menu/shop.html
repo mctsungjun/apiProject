@@ -29,7 +29,7 @@
                            
                             <button class="btn btn-outline-dark btnGoodsRegister" ype="button"><i class="bi bi-clipboard-data"></i>
                                 상품등록</button>
-                            <button class="btn btn-outline-dark checkout mx-3" type="button">
+                            <button class="btn btn-outline-dark checkout mx-3" type="button" >
                                 <i class="bi-cart-fill me-1"></i>
                                 장바구니
                                 <span class="badge bg-dark text-white ms-1 rounded-pill" id ="cartCount">0</span>
@@ -49,7 +49,7 @@
                                         <div class="text-center">
                                             <!-- Product name-->
                                             <h5 class="fw-bolder" name="goodsName"  th:text="${p.goodsName}"></h5>
-                                            <!-- Product price--><span name="goodsPrice" th:text="${p.goodsPrice}">
+                                            <!-- Product price--><span name="goodsPrice" id="goodsPrice" th:text="${p.goodsPrice}">
                                              
                                             </span>
                                             <span>원</span>
@@ -60,9 +60,9 @@
                                         <div class="text-center"><button type="button" class="btn btn-outline-dark mt-auto"  th:onclick="addCart([[${p.goodsName}]]);">장바구니 추가</button></div>
                                     </div>
                                     <input type="hidden" id="sessionId" th:value="${session.id}">
-                                    <th:block th:if="${map.code = 'f'}">
-                                        <input type="hidden" name="orderCode" id="gCode" th:value="${map.code}">
-                                    </th:block>
+                                    
+                                        <!-- <input type="hidden" name="orderCode" id="gCode" th:value="${map.code}"> -->
+                                    
                                 </div>
                             </div>
                             </th:block>        
@@ -87,13 +87,15 @@
             }
             function addCart(name){
                 let sessionId = document.getElementById("sessionId").value;
-                let gCode = document.getElementById("gCode").value;
                
+                let goodsPriceEl = document.getElementById("goodsPrice");
+                let goodsPrice = parseInt(goodsPriceEl.textContent,10);
+                
                 if(sessionId != null && sessionId.trim() != "" ){
                     let formData = new FormData();
-                    formData.append("orderCode",gCode);
+                  
                     formData.append("goodsName",name);
-                                
+                    formData.append("goodsPrice",goodsPrice);            
                                 increaseCart();
                                 $.ajax({
                                     url:"/goodsOrder",
@@ -103,6 +105,7 @@
                                     contentType:false,
                                     success:(resp)=>{
                                         console.log(resp);
+                                     
                                     }
                                 })
                 }else{
@@ -110,6 +113,16 @@
                 }
             
             }
+            // function gotoPayment(){
+            //     $.ajax({
+            //         url:"/gotoPayment",
+            //         type:"POST",
+            //         success:(resp)=>{
+            //             let temp = $(resp).find(".payment");
+            //             $(".content-change").html(temp);
+            //         }
+            //     })
+            // }
              </script>
             
                 <!-- Bootstrap core JS-->

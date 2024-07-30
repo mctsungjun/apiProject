@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myjob.useapi.dao.GoodsDao;
-
+import com.myjob.useapi.dao.MemberDao;
+import com.myjob.useapi.vo.GoodsCart;
 import com.myjob.useapi.vo.GoodsVo;
+import com.myjob.useapi.vo.MemberVo;
 import com.myjob.useapi.vo.ProductPhoto;
-import com.myjob.useapi.vo.UserOrder;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,14 +34,16 @@ public class ShopController {
     public static String uploadfolder = "H:\\job4project\\useapi\\src\\main\\resources\\static\\upload\\";
     @Autowired
     GoodsDao goodsDao;
+    @Autowired
+    MemberDao memberDao;
     
-    // 쇼핑결제폼 보기
-    @RequestMapping(path="checkout")
-    public ModelAndView checkout(){
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("shopping/payment");
-        return mv;
-    }
+    // // 쇼핑결제폼 보기
+    // @RequestMapping(path="checkout")
+    // public ModelAndView checkout(){
+    //     ModelAndView mv = new ModelAndView();
+    //     mv.setViewName("shopping/payment");
+    //     return mv;
+    // }
 
     // 상품등록 폼보기
     @RequestMapping(path="/goodsRegister")
@@ -94,26 +98,55 @@ public class ShopController {
 
     //카트집어넣기
     @RequestMapping(path="/goodsOrder")
-    public ResponseEntity<String> goodsCart(@RequestParam("goodsName") String goodsName, @RequestParam(name = "orderCode", required=false) String code , Model model,HttpSession se){
+    public ResponseEntity<String> goodsCart(@RequestParam("goodsName") String goodsName,@RequestParam("goodsPrice") int goodsPrice, HttpSession se){
         String msg = "";
         String orderCode="";
         String id = (String)se.getAttribute("id");
+        orderCode =(String)se.getAttribute("orderCode");
         System.out.println(goodsName);
-        System.out.println(code);
+       
         
-        if(code.equals("f") ){
-                orderCode= goodsDao.orderCode(id);
+        if(orderCode == null){
+                orderCode= goodsDao.orderCode(id, se);
                 System.out.println(orderCode);
              }
             GoodsVo vo = new GoodsVo();
             vo.setGoodsName(goodsName);
-
+             vo.setGoodsPrice(goodsPrice);
             msg = goodsDao.goodsCartAdd(orderCode,vo);
-             model.addAttribute("code", orderCode);
-       
+          
+          
+            
        
 
         return ResponseEntity.ok(msg);
+    }
+    //결제창으로
+    @RequestMapping(path="/gotoPayment")
+    public ModelAndView gotoPayment(HttpSession session){
+        ModelAndView mv = new ModelAndView();
+        String id = (String)session.getAttribute("id");
+        //주문코드 가지고 오기
+
+        String orderCode = goodsDao.getOrderCode(id);
+        if(!orderCode.equals("empty")){
+            // 개인 정보 가져오기
+                 MemberVo vo = memberDao.personInfo(id); 
+            //주문 카트 목록 가져오기
+            List<GoodsVo> list = goodsDao.getGoods(orderCode);
+            GoodsCart gc = new GoodsCart();
+            gc.setOrders(list);
+            int sum = gc.goodsCal();
+            mv.addObject("list", list);
+            mv.addObject("sum", sum);
+            mv.addObject("vo", vo);
+            mv.setViewName("shopping/payment");
+        }else{
+            mv.setViewName("shopping/payment");
+        }
+
+        return mv;
+
     }
     
 }
