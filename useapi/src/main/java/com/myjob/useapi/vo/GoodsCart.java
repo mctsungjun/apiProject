@@ -23,4 +23,13 @@ public class GoodsCart {
         }
         return sum;
     }
+    public int totalEa(){
+        int total = 0;
+        if(orders.size()>0){
+            for(GoodsVo vo: orders){
+                total = total + vo.ea;
+            }
+        }
+        return total;
+    }
 }

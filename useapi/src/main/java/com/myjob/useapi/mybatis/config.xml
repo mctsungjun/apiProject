@@ -15,7 +15,7 @@
 		<typeAlias type="com.myjob.useapi.vo.ProductPhoto" alias="ProductPhoto" />
 		<typeAlias type="com.myjob.useapi.vo.GoodsCart" alias="GoodsCart" />
 		<typeAlias type="com.myjob.useapi.vo.UserOrder" alias="UserOrder" />
-		
+		<typeAlias type="com.myjob.useapi.dto.Orderlist" alias="Orderlist" />
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">

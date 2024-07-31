@@ -192,7 +192,7 @@ select id , password from users where name=#{name} and email = #{email1} and ema
  
 </insert>
 <select id="getOrderCode" parameterType="String" resultType="UserOrder">
-    select * from userorder where id = #{_parameter}
+    select * from userorder where id = #{_parameter} 
 </select>
 <update id="changeOrdered" parameterType="Map">
     update userorder set ordered = #{change} where orderCode = #{orderCode}
@@ -200,11 +200,18 @@ select id , password from users where name=#{name} and email = #{email1} and ema
 <select id="getGoodsVoList" parameterType="String" resultType="GoodsVo">
     select goodsName, goodsprice, ea from goodscart where ordercode = #{_parameter}
 </select >
-<select id="checkName" parameterType="String" resultType="Integer">
+<select id="checkName" parameterType="Map" resultType="Integer">
 
-    select count(*) from goodscart where goodsName = #{_parameter}
+    select count(*) from goodscart where goodsName = #{name} and ordercode = #{code}
 </select>
-<update id="cartAddEa" parameterType="String">
-    update goodscart set ea = ea+1 where goodsName = #{_parameter}
+<update id="cartAddEa" parameterType="Map">
+    update goodscart set ea = ea+1 where goodsName = #{name} and ordercode = #{code}
 </update>
+<insert id="approved" parameterType="Map" >
+    insert into approved_order(partner_order_id,item_name,total,payment_method_type,approved_at) values(#{ap.partner_order_id}, #{ap.item_name}, #{tot}, #{ap.payment_method_type}, #{ap.approved_at})
+    
+</insert>
+<select id="getOrderDetail" parameterType="String" resultType="Orderlist">
+    select * from approved_order where partner_order_id = #{_parameter}
+</select>
 </mapper>

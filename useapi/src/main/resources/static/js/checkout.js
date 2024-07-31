@@ -12,7 +12,7 @@ export function checkout(){
                 url:"/gotoPayment",
                 type:"POST",
                 success:(resp)=>{
-                    let temp = $(resp).find(".payment");
+                    let temp = $(resp).find(".shoping");
                     $(".content-change").html(temp);
                 }
             })
@@ -56,7 +56,59 @@ export function checkout(){
     }
     return {addCart}
 }
+export function payment(){
 
+    document.getElementById("btnPayment").onclick=()=>{
+        let radios = document.getElementsByName("paymentMethod");
+       for(const radio of radios){
+        if(radio.checked){
+           const selectValue = radio.id;
+            if(selectValue === "kakaopay"){
+
+                $.ajax({
+                url:"/kakaoPayment",
+                type:"POST",
+                success:(resp)=>{
+                    
+                   var fileInput = window.open(resp.next_redirect_pc_url,'_blank',"width=500 height=600");
+                    const checkWindowClosed =  setInterval(function(){
+                        if (fileInput.closed) {
+                            clearInterval(checkWindowClosed);
+                            $.ajax({
+                                url:"/kakaoApprovedDetali",
+                                type:"POST",
+                                success:(resp)=>{
+                                let temp = $(resp).find(".orderDetail");
+                                $(".content-change").html(temp);
+                                            }
+                        
+                                })
+                        }
+                    }, 300); // 1초마다 체크
+                    
+                  
+                    
+                }
+            })
+            }   
+        }
+       }
+      
+     
+
+    }
+}
+function callOrderDetail(){
+    $.ajax({
+        url:"/kakaoApprovedDetali",
+        type:"POST",
+        success:(resp)=>{
+        let temp = $(resp).find(".orderDetail");
+        $(".content-change").html(temp);
+                    }
+
+        })
+}
 
 
 

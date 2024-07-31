@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -19,13 +20,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.myjob.useapi.dao.GoodsDao;
 import com.myjob.useapi.dao.MemberDao;
+import com.myjob.useapi.dto.Orderlist;
+import com.myjob.useapi.service.KakaoPay;
+import com.myjob.useapi.vo.ApproveResponse;
 import com.myjob.useapi.vo.GoodsCart;
 import com.myjob.useapi.vo.GoodsVo;
 import com.myjob.useapi.vo.MemberVo;
 import com.myjob.useapi.vo.ProductPhoto;
-
+import com.myjob.useapi.vo.ReadyResponse;
 
 import jakarta.servlet.http.HttpSession;
+
+
 
 @RestController
 public class ShopController {
@@ -36,6 +42,8 @@ public class ShopController {
     GoodsDao goodsDao;
     @Autowired
     MemberDao memberDao;
+    @Autowired
+    KakaoPay kakaoPay;
     
     // // 쇼핑결제폼 보기
     // @RequestMapping(path="checkout")
@@ -129,7 +137,7 @@ public class ShopController {
         //주문코드 가지고 오기
 
         String orderCode = goodsDao.getOrderCode(id);
-        if(!orderCode.equals("empty")){
+        if(orderCode !=null){
             // 개인 정보 가져오기
                  MemberVo vo = memberDao.personInfo(id); 
             //주문 카트 목록 가져오기
@@ -142,11 +150,70 @@ public class ShopController {
             mv.addObject("vo", vo);
             mv.setViewName("shopping/payment");
         }else{
-            mv.setViewName("shopping/payment");
+            Map<String,Object> map = new HashMap<>();
+            List<GoodsVo> gv = new ArrayList<>();
+            gv = goodsDao.goodsBri();
+            System.out.println(gv);
+          
+            map.put("gv",gv);
+            mv.addObject("map", map);
+            mv.setViewName("menu/shop");
         }
 
         return mv;
 
     }
-    
+    //카카오 페이 1차 작업
+    @RequestMapping(path="/kakaoPayment")
+    public ReadyResponse kakaoPayment(HttpSession se) throws Exception{
+
+        String id = (String)se.getAttribute("id");
+        String orderCode = goodsDao.getOrderCode(id);
+       List<GoodsVo> list = goodsDao.getGoods(orderCode);
+       GoodsCart gc = new GoodsCart();
+       gc.setOrders(list);
+        
+       ReadyResponse readyResponse = kakaoPay.payReady(orderCode,  id, gc);
+       se.setAttribute("tid", readyResponse.getTid());
+        return readyResponse;
+    }
+
+    //카카오 페이 2차 작업
+    @RequestMapping(path="kakaopaysuccess")
+    public ModelAndView kakaoPaysuccess(@RequestParam("pg_token") String pgToken, HttpSession se) throws Exception{
+        ModelAndView mv = new ModelAndView();
+        String tid =(String)se.getAttribute("tid");
+        String id = (String)se.getAttribute("id");
+        String orderCode = goodsDao.getOrderCode(id);
+        ApproveResponse approveResponse = kakaoPay.payApprove(tid,id,pgToken,orderCode);
+        String msg = goodsDao.approvedOrder(approveResponse ,se);
+        System.out.println("거래승인저장:  "+msg);
+        mv.addObject("amount", approveResponse.getAmount());
+        mv.addObject("info", approveResponse);
+        mv.setViewName("kakaopay/kakaoPaySuccess");
+        return mv;
+    }
+    @RequestMapping(path="/kakaopaysfail")
+    public ModelAndView kakaoPayfail(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("kakaopay/kakaoPayFail");
+        return mv;
+    }
+    @RequestMapping(path="/kakaoApprovedDetali")
+    public ModelAndView kakaoApprovedDetail(HttpSession se){
+        ModelAndView mv = new ModelAndView();
+       
+        String orderCode =(String)se.getAttribute("orderCodeT");
+        
+        Orderlist approveResponse = goodsDao.getApproveResponse(orderCode);
+         System.out.println(approveResponse);
+        mv.addObject("vo", approveResponse);
+        mv.setViewName("shopping/orderDetail");
+        return mv;
+    }
+
+    // @RequestMappint(path="/kakaopayscancel")
+    // public ModelAndView kakaoPayCancel(){
+
+    // }
 }

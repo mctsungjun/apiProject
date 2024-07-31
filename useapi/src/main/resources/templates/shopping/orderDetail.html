@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문상세</title>
+</head>
+<body>
+    <div>
+        <div class="container orderDetail">
+            <div class="container title">
+                <ul class="list-group list-group-horizontal ">
+                    <li class="list-group-item col-3  bg-secondary-subtle text-center id">주문번호</li>
+                    <li class="list-group-item col-5 bg-tertiary-subtle text-center name">상품명</li>
+                    <li class="list-group-item col-1 bg-danger-subtle text-center address1">결제금액</li>
+                    <li class="list-group-item col-1bg-warning-subtle text-center phone">결제방법</li>
+                    <li class="list-group-item col-2 bg-danger-subtle text-center email">결제일시</li>
+                    
+                </ul>
+
+            </div>
+            <div class="container" >
+                <ul class="list-group list-group-horizontal" >
+                    <li class="list-group-item col-3 text-center id" th:text="${vo.partner_order_id}"></li>
+                    <li class="list-group-item col-5 text-center item_name" th:text="${vo.item_name}"></li>
+                    <li class="list-group-item col-1 text-center total" th:text="${vo.total}"></li>
+                    <li class="list-group-item col-1 text-center payment_method_type" th:text="${vo.payment_method_type}"></li>
+                    <li class="list-group-item col-2 text-center approved_at" th:text="${vo.approved_at}"></li>
+                </ul>
+            </div>
+
+            <div>
+                <button class="d-flex justify-content-end btn btn-outline-info" type="button" th:onclick="btnCancel([[${vo.partner_order_id}]])">취소</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
