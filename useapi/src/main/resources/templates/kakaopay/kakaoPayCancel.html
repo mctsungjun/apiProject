@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    요청 고유 번호:                         [[${c.aid}]]
+    결제 고유번호 :                         [[${c.tid}]]
+    가맹점 코드   :                         [[${c.cid}]]
+    결제 상태    :                          [[${c.status}]]
+    가맹점 주문번호                          [[${c.partner_order_id}]]
+    가맹점 회원 id                             [[${c.partner_user_id}]]
+    결제 수단, CARD 또는 MONEY 중 하나        [[${c.payment_method_type}]]
+    결제 금액                               [[${c.amount.total}]]
+    상품 이름                               [[${c.item_name}]]
+    
+    상품 수량                               [[${c.quantity}]]
+    결제 준비 요청 시각                     [[${c.created_at}]]
+    결제 승인 시각                          [[${c.approved_at}]]
+    결제 취소 시각                          [[${c.canceled_at}]]
+   
+
+
+</body>
+</html>

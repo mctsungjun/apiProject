@@ -214,4 +214,10 @@ select id , password from users where name=#{name} and email = #{email1} and ema
 <select id="getOrderDetail" parameterType="String" resultType="Orderlist">
     select * from approved_order where partner_order_id = #{_parameter}
 </select>
+<update id="addTid" parameterType="Map">
+    update goodscart set tid = #{tid} where ordercode = #{ordercode}
+</update>
+<select id="getCart" parameterType="String" resultType="GoodsCart">
+    select * from goodscart where ordercode = #{_parameter}
+</select>
 </mapper>

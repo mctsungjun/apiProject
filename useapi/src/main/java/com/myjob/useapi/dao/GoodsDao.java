@@ -3,8 +3,11 @@ package com.myjob.useapi.dao;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,7 @@ import com.myjob.useapi.dto.Orderlist;
 import com.myjob.useapi.mybatis.MyFactory;
 import com.myjob.useapi.vo.Amount;
 import com.myjob.useapi.vo.ApproveResponse;
+import com.myjob.useapi.vo.GoodsCart;
 import com.myjob.useapi.vo.GoodsVo;
 import com.myjob.useapi.vo.ProductPhoto;
 import com.myjob.useapi.vo.UserOrder;
@@ -205,6 +209,69 @@ public class GoodsDao {
     session.close();
     return approveResponse;
    }
-   
+   public void addTid(String tid, String orderCode){
+    session = new MyFactory().getSession();
+    Map<String,String> map = new HashMap<>();
+    map.put("tid",tid);
+    map.put("ordercode",orderCode);
+    String msg="";
+    int cnt=session.update("member.addTid", map);
+    if (cnt>0){
+        msg="ok";
+        session.commit();
+    }else{
+        msg="fail";
+        session.rollback();
+    }
+    session.close();
+   }
+
+   public GoodsCart getCart(String partnerOrderId){
+    session = new MyFactory().getSession();
+    String msg = "";
+    Set<String> set = new LinkedHashSet<>();
+    List<GoodsCart> goodsCarts = session.selectList("member.getCart", partnerOrderId);
+    if(goodsCarts.size()>0){
+        for(GoodsCart goodsCart:goodsCarts){
+            set.add(goodsCart.getOrderCode());
+            set.add(goodsCart.getTid());
+            set.add(goodsCart.getTax_free_amount());
+
+        }
+        msg="ok";
+    }
+    GoodsCart gc = new GoodsCart();
+    String[] gcs = new String[3];
+    Iterator<String> iterator = set.iterator();
+    int i = 0;
+    while (iterator.hasNext()) {
+        gcs[i] = iterator.next();
+        i ++;
+    }
+    gc.setOrderCode(gcs[0]);
+    gc.setTid(gcs[1]);
+    gc.setTax_free_amount(gcs[2]);
+    return gc;
+   }
+
+   //주문취소건 표시
+   public String orderedCancel(GoodsCart goodsCart){
+    session = new MyFactory().getSession();
+    String cancel = "";
+    Map<String,String> mapOrdered = new HashMap<>();
+    mapOrdered.put("orderCode", goodsCart.getOrderCode());
+    mapOrdered.put("change","c");
+    int cnt = session.update("member.changeOrdered", mapOrdered);
+    if (cnt>0){
+        cancel = "ok";
+        session.commit();
+        
+    }else{
+        cancel = "falil";
+        session.rollback();
+    }
+    session.close();
+    return cancel;
+   }
 
 }

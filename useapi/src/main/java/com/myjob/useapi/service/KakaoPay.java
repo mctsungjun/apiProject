@@ -10,17 +10,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myjob.useapi.dto.PayCancelDto;
 import com.myjob.useapi.vo.ApproveResponse;
 import com.myjob.useapi.vo.GoodsCart;
 import com.myjob.useapi.vo.GoodsVo;
 import com.myjob.useapi.vo.ReadyResponse;
-import com.myjob.useapi.vo.UserOrder;
-import org.springframework.http.MediaType;
+
 import lombok.extern.log4j.Log4j;
 
 
@@ -157,6 +156,34 @@ public class KakaoPay {
     ApproveResponse approveResponse = responseEntity.getBody();
     System.out.println(approveResponse);
         return approveResponse;
+    }
+
+    //카카오 취소 요청
+    public PayCancelDto kakaoPayCancel(GoodsCart goodsCart, int total) throws Exception{
+        String tid =goodsCart.getTid();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("cid", "TC0ONETIME");
+        parameters.put("tid",tid);
+        parameters.put("cancel_amount",total);
+        parameters.put("cancel_tax_free_amount",0);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(parameters);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization","SECRET_KEY DEV42B8A4C24E846AA7693A8CE5BE5E9A098CA2A");
+        headers.set("Content-Type", "application/json");
+
+        HttpEntity<String> requesEntity = new HttpEntity<>(json, headers);
+
+        String url = "https://open-api.kakaopay.com/online/v1/payment/cancel";
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<PayCancelDto> responseEntity = restTemplate.exchange(url,HttpMethod.POST, requesEntity, PayCancelDto.class);
+        PayCancelDto payCancelDto = responseEntity.getBody();
+        
+        return payCancelDto;
+
     }
 
 }

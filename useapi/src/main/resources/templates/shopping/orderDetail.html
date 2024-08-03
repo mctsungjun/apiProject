@@ -8,29 +8,43 @@
 <body>
     <div>
         <div class="container orderDetail">
+            <script type="module">
+
+                import {orderCance} from "./js/checkout.js";
+                orderCance();
+            </script>
             <div class="container title">
                 <ul class="list-group list-group-horizontal ">
-                    <li class="list-group-item col-3  bg-secondary-subtle text-center id">주문번호</li>
-                    <li class="list-group-item col-5 bg-tertiary-subtle text-center name">상품명</li>
-                    <li class="list-group-item col-1 bg-danger-subtle text-center address1">결제금액</li>
-                    <li class="list-group-item col-1bg-warning-subtle text-center phone">결제방법</li>
-                    <li class="list-group-item col-2 bg-danger-subtle text-center email">결제일시</li>
+                    <li class="list-group-item col-lg-3  bg-secondary-subtle text-center id">주문번호</li>
+                    <li class="list-group-item col-lg-5 bg-tertiary-subtle text-center name">상품명</li>
+                    <li class="list-group-item col-lg-1 bg-danger-subtle text-center address1">결제금액</li>
+                    <li class="list-group-item col-lg-1 bg-warning-subtle text-center phone">결제방법</li>
+                    <li class="list-group-item col-lg-2 bg-danger-subtle text-center email">결제일시</li>
                     
                 </ul>
 
             </div>
-            <div class="container" >
-                <ul class="list-group list-group-horizontal" >
-                    <li class="list-group-item col-3 text-center id" th:text="${vo.partner_order_id}"></li>
-                    <li class="list-group-item col-5 text-center item_name" th:text="${vo.item_name}"></li>
-                    <li class="list-group-item col-1 text-center total" th:text="${vo.total}"></li>
-                    <li class="list-group-item col-1 text-center payment_method_type" th:text="${vo.payment_method_type}"></li>
-                    <li class="list-group-item col-2 text-center approved_at" th:text="${vo.approved_at}"></li>
+            <div class="container mt-4" >
+                <form name="formCancel" method="post">
+                         <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-lg-3 text-center id" name="partner_order_id" >[[${vo.partner_order_id}]]</li>
+                    <li class="list-group-item col-lg-5 text-center item_name" name="item_name" >[[${vo.item_name}]]</li>
+                    <li class="list-group-item col-lg-1 text-center total" name="total" >[[${vo.total}]]</li>
+                    <li class="list-group-item col-lg-1 text-center payment_method_type" name="payment_method_type" >[[${vo.payment_method_type}]]</li>
+                    <li class="list-group-item col-lg-2 text-center approved_at" name="approved_at" >[[${vo.approved_at}]]</li>
                 </ul>
+                <input type="hidden" name="partner_order_id" th:value="${vo.partner_order_id}
+                " />
+                <input type="hidden" name="item_name" th:value="${vo.item_name}" />
+                <input type="hidden" name="total" th:value="${vo.total}" />
+                <input type="hidden" name="payment_method_type" th:value="${vo.payment_method_type}" />
+                <input type="hidden" name="approved_at" th:value="${vo.approved_at}" />
+                </form>
+           
             </div>
 
-            <div>
-                <button class="d-flex justify-content-end btn btn-outline-info" type="button" th:onclick="btnCancel([[${vo.partner_order_id}]])">취소</button>
+            <div class="container d-flex justify-content-end ">
+                <button class="btn btn-outline-info mt-3 btnCancel" type="button" >취소</button>
             </div>
         </div>
     </div>

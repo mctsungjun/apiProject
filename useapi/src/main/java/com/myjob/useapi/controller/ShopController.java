@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.myjob.useapi.dao.GoodsDao;
 import com.myjob.useapi.dao.MemberDao;
 import com.myjob.useapi.dto.Orderlist;
+import com.myjob.useapi.dto.PayCancelDto;
 import com.myjob.useapi.service.KakaoPay;
 import com.myjob.useapi.vo.ApproveResponse;
 import com.myjob.useapi.vo.GoodsCart;
@@ -174,9 +176,33 @@ public class ShopController {
        gc.setOrders(list);
         
        ReadyResponse readyResponse = kakaoPay.payReady(orderCode,  id, gc);
+       String tid = readyResponse.getTid();
+       goodsDao.addTid(tid , orderCode);
        se.setAttribute("tid", readyResponse.getTid());
         return readyResponse;
     }
+    //결제취소 호출
+   @RequestMapping(path="/orderCancel", method = RequestMethod.POST)
+public ModelAndView orderCancel(@RequestParam("partner_order_id") String partnerOrderId,@RequestParam("total") int total) throws Exception{
+    String msg = "";
+    String cancel = "";
+    GoodsCart goodsCart = goodsDao.getCart(partnerOrderId);
+    System.out.println("goodsCart 카트: "+goodsCart);
+    System.out.println("total: " + total);
+    PayCancelDto payCancelDto = kakaoPay.kakaoPayCancel(goodsCart, total);
+    if (payCancelDto !=null){
+        msg = "ok";
+     cancel = goodsDao.orderedCancel(goodsCart);
+    }else{
+        msg = "fail";
+    }
+    System.out.println(payCancelDto.toString());
+    ModelAndView mv = new ModelAndView();
+   
+    mv.addObject("c", payCancelDto);
+    mv.setViewName("kakaopay/kakaoPayCancel");
+    return mv;
+}
 
     //카카오 페이 2차 작업
     @RequestMapping(path="kakaopaysuccess")

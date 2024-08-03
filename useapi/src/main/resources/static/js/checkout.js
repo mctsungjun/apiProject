@@ -69,7 +69,7 @@ export function payment(){
                 url:"/kakaoPayment",
                 type:"POST",
                 success:(resp)=>{
-                    
+                    // 새창에서 창종료하고 다시 ajax로 작업
                    var fileInput = window.open(resp.next_redirect_pc_url,'_blank',"width=500 height=600");
                     const checkWindowClosed =  setInterval(function(){
                         if (fileInput.closed) {
@@ -97,18 +97,30 @@ export function payment(){
      
 
     }
-}
-function callOrderDetail(){
-    $.ajax({
-        url:"/kakaoApprovedDetali",
-        type:"POST",
-        success:(resp)=>{
-        let temp = $(resp).find(".orderDetail");
-        $(".content-change").html(temp);
-                    }
 
-        })
 }
+export function orderCance(){
+
+
+    
+    document.querySelector(".btnCancel").onclick=()=>{
+        let frm = document.formCancel;
+        let frmData = new FormData(frm);
+        $.ajax({
+        url:"/orderCancel",
+        type:"POST",
+        data:frmData,
+        processData: false,  // FormData는 자동으로 URL 인코딩 처리하므로 false로 
+        contentType: false,
+        success:(resp)=>{
+            alert(resp)
+           
+        }
+    })
+    }
+ 
+}
+
 
 
 

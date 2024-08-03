@@ -12,6 +12,8 @@ public class GoodsCart {
     String goodsName;
     String goodsPrice;
     int ea;
+    String tid;
+    String tax_free_amount;
     List<GoodsVo> orders;
 
     public int goodsCal(){
