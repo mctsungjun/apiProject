@@ -20,10 +20,10 @@ import com.myjob.useapi.vo.GoodsCart;
 import com.myjob.useapi.vo.GoodsVo;
 import com.myjob.useapi.vo.ReadyResponse;
 
-import lombok.extern.log4j.Log4j;
 
 
-@Log4j
+
+
 @Service
 public class KakaoPay {
     // 주석으로 처리한 코드는 아마도  MultiValueMap에서 문제가 발생함 정확한 원인은 모름

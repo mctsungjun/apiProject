@@ -665,7 +665,7 @@ function updateEmailInput(){
 //--------------------------------------------------------주소----------------------------
          //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
          function sample4_execDaumPostcode(){
-            var postcodePopup = new daum.Postcode({
+            new daum.Postcode({
                 oncomplete: function(data) {
                   
                     var roadAddr = data.roadAddress; // 도로명 주소 변수

@@ -90,7 +90,32 @@ export function payment(){
                     
                 }
             })
-            }   
+            } else{
+                $.ajax({
+                    url:"/nicepayment",
+                    type:"post",
+                    success:(resp)=>{
+                        let temp = $(resp).find(".shoping");
+                        $(".content-change").html(temp);
+                        let client =document.getElementById("clientId").value;
+                        let order = document.getElementById("orderId").value;
+                        let amoun = document.getElementById("amount").value;
+                        let goodsNam = document.getElementById("goodsName").value;
+                      
+                        AUTHNICE.requestPay({
+                            clientId: client,
+                            method: 'card',
+                            orderId: order,
+                            amount:amoun,
+                            goodsName: goodsNam,
+                            returnUrl: 'http://localhost:8080/nice/serverAuth', //API를 호출할 Endpoint 입력
+                            fnError: function (result) {
+                              alert('개발자확인용 : ' + result.errorMsg + '')
+                            }
+                         });
+                    }
+                })
+            }  
         }
        }
       

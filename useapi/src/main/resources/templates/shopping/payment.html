@@ -15,6 +15,7 @@
   <body class="bg-body-tertiary">
     <div >
    <div class="container shoping">
+    <script src="https://pay.nicepay.co.kr/v1/js/"></script>
       <script type="module">
         import {payment} from "./js/checkout.js";
         payment();
@@ -166,13 +167,20 @@
           <button class="w-25 btn btn-primary btn-lg" id="btnPayment"  type="button">결제</button>
           <button class="w-25 btn btn-primary btn-lg mx-5" type="button">취소</button>
         </form>
+        <form name="niceform" id="niceform" method="post">
+          <input type="hidden" id="clientId" th:value="${clientId}">
+          <input type="hidden" id="orderId" th:value="${orderId}">
+          <input type="hidden" id="amount" th:value="${amount}">
+          <input type="hidden" id="goodsName" th:value="${goodsName}">
+        </form>
       </div>
     </div>
   </main>
 
   
 </div>
-    <script src="checkout.js"></script>
+
+
     </div>
  
 </body>
